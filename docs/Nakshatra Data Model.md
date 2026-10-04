@@ -123,7 +123,7 @@ Runs own their ledger, events, rings and result. The graph tables belong to no r
 | --- | --- | --- | --- |
 | `run_id` | TEXT PK₁ FK→runs | no |  |
 | `seq` | INTEGER PK₂ | no | 1-based, gapless per run |
-| `type` | TEXT | no | `phase`, `credit`, `node`, `edge`, `ring_update`, `done`, `error` |
+| `type` | TEXT | no | `phase`, `credit`, `node`, `edge`, `ring_update`, `warning`, `done`, `cancelled`, `error` (DECISIONS A6) |
 | `payload_json` | TEXT | no | §6 |
 | `ts` | REAL | no |  |
 
@@ -239,7 +239,7 @@ CREATE INDEX IF NOT EXISTS ix_ledger_run ON ledger(run_id, id);
 CREATE TABLE IF NOT EXISTS events (
   run_id       TEXT NOT NULL REFERENCES runs(run_id),
   seq          INTEGER NOT NULL CHECK (seq >= 1),
-  type         TEXT NOT NULL CHECK (type IN ('phase','credit','node','edge','ring_update','done','error')),
+  type         TEXT NOT NULL CHECK (type IN ('phase','credit','node','edge','ring_update','warning','done','cancelled','error')),
   payload_json TEXT NOT NULL CHECK (json_valid(payload_json)),
   ts           REAL NOT NULL,
   PRIMARY KEY (run_id, seq)
