@@ -251,3 +251,17 @@ def test_guards():
     assert len(notes) == 2 and "real community" in notes[0] and "same brand" in notes[1]
     crew = ring_guards(*(lambda g, s: (g, peel.Ring(*plant(g, s), 1.0)))(*random_graph(seed=2)))
     assert crew["rating_variance"] == 0 and crew["brand_token"] is None and guard_notes(crew) == []
+
+
+def test_overlap_summary():
+    from nakshatra.algo.judge import overlap_summary
+    g = Graph()
+    s = g.place("0x0:0x0")
+    a, b, c = g.user("1"), g.user("2"), g.user("3")
+    for u in (a, b, c):
+        g.users[u].expanded = True
+        g.add_edge(Edge(u, s, 5, 0, 0, True))
+    for p in ("0x1:0x1", "0x2:0x2"):
+        g.add_edge(Edge(a, g.place(p), 4, 0, 0, True))
+        g.add_edge(Edge(b, g.place(p), 4, 0, 0, True))
+    assert overlap_summary(g, s) == {"pairs_compared": 3, "max_shared_places": 2}  # the seed itself never counts

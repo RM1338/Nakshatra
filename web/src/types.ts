@@ -21,7 +21,8 @@ export interface Ring {
 }
 export interface Result {
   seed: { data_id: string; title: string; rating: number | null; d_p: number | null };
-  coverage: { reviewers_sampled: number; reviewers_expanded: number; places: number; edges: number; low_coverage?: boolean };
+  coverage: { reviewers_sampled: number; reviewers_expanded: number; places: number; edges: number; low_coverage?: boolean;
+              pairs_compared?: number; max_shared_places?: number };
   rings: Ring[];
   rating: { displayed: number | null; adjusted: number | null; ci: [number | null, number | null];
             sample_mean: number | null; n_sampled: number; set_aside?: number };

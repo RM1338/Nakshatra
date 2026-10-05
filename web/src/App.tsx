@@ -407,7 +407,7 @@ function ResultPanel({ result, status, selectedRing, setSelectedRing, openPlace,
   const cov = result.coverage;
   return (
     <div className="result">
-      <RatingCard rating={result.rating} />
+      <RatingCard rating={result.rating} seed={result.seed} />
       <p className="verdict">{result.verdict ?? result.no_coordination_message}</p>
       {cov.low_coverage && (
         <p className="badge-low" title="The search was still finding new connections when the budget ran out.">Low coverage</p>
@@ -421,10 +421,8 @@ function ResultPanel({ result, status, selectedRing, setSelectedRing, openPlace,
           ))}
         </section>
       )}
-      <p className="coverage muted">
-        Checked {cov.reviewers_expanded} reviewers' histories across {cov.places.toLocaleString()} places,
-        from {cov.reviewers_sampled} recent reviews.
-      </p>
+      <WhatWeChecked result={result} budget={status.credits.budget} />
+      <HowToRead />
       {others.length > 0 && (
         <div className="others">
           <button className="link" onClick={() => setShowOthers(!showOthers)} aria-expanded={showOthers}>
@@ -450,21 +448,50 @@ function ResultPanel({ result, status, selectedRing, setSelectedRing, openPlace,
   );
 }
 
-function RatingCard({ rating }: { rating: NonNullable<RunStatus['result']>['rating'] }) {
+function RatingCard({ rating, seed }: { rating: NonNullable<RunStatus['result']>['rating']; seed: NonNullable<RunStatus['result']>['seed'] }) {
+  const setAside = rating.set_aside ?? 0;
   const target = rating.adjusted;
-  const shown = useCountTo(rating.displayed, target);
+  const shown = useCountTo(rating.displayed, setAside ? target : null);
   const [lo, hi] = rating.ci;
   const x = (v: number) => `${((v - 1) / 4) * 100}%`;
+  const total = seed.d_p !== null ? `${seed.d_p.toLocaleString()} reviews` : 'all reviews';
+
+  if (!setAside) {
+    // Nothing set aside: no adjusted rating to show. Compare Google's rating with the newest reviews instead.
+    const recent = rating.sample_mean;
+    const gap = recent !== null && rating.displayed !== null ? recent - rating.displayed : 0;
+    return (
+      <section className="rating-card" aria-label="Rating">
+        <div className="rating-pair">
+          <div>
+            <span className="rating-num adjusted">{rating.displayed?.toFixed(1) ?? '–'}</span>
+            <span className="rating-cap">Google rating, {total}</span>
+          </div>
+          <div title="Plain average of the newest reviews the check read.">
+            <span className="rating-num">{recent?.toFixed(1) ?? '–'}</span>
+            <span className="rating-cap">newest {rating.n_sampled} reviews</span>
+          </div>
+        </div>
+        <p className="rating-note">No coordinated accounts were found, so no reviews were set aside and the rating stands.</p>
+        {Math.abs(gap) >= 0.4 && (
+          <p className="rating-note gap">
+            The newest reviews are noticeably {gap > 0 ? 'more' : 'less'} positive than the overall rating. That can have
+            ordinary causes, such as a recent change in service, and on its own it is not evidence of coordination.
+          </p>
+        )}
+      </section>
+    );
+  }
   return (
     <section className="rating-card" aria-label="Rating">
       <div className="rating-pair">
         <div>
           <span className="rating-num">{rating.displayed?.toFixed(1) ?? '–'}</span>
-          <span className="rating-cap">shown on Google</span>
+          <span className="rating-cap">Google rating, {total}</span>
         </div>
-        <div title="Recent rating with coordinated accounts' reviews set aside, pulled slightly toward similar places nearby (κ = 5); interval from 1,000 resamples.">
+        <div title="Average of the newest reviews with the coordinated accounts' reviews set aside, pulled slightly toward similar places nearby (κ = 5); interval from 1,000 resamples.">
           <span className="rating-num adjusted">{shown?.toFixed(1) ?? '–'}</span>
-          <span className="rating-cap">recent rating, adjusted</span>
+          <span className="rating-cap">recent rating without {setAside} coordinated account{setAside > 1 ? 's' : ''}</span>
         </div>
       </div>
       {lo !== null && hi !== null && target !== null && (
@@ -476,9 +503,55 @@ function RatingCard({ rating }: { rating: NonNullable<RunStatus['result']>['rati
         </div>
       )}
       <p className="rating-note muted">
-        Estimate from the newest {rating.n_sampled} reviews{lo !== null && hi !== null ? `, likely between ${lo.toFixed(1)} and ${hi.toFixed(1)}` : ''}.
+        From the newest {rating.n_sampled} reviews{lo !== null && hi !== null ? `, likely between ${lo.toFixed(1)} and ${hi.toFixed(1)}` : ''}.
       </p>
     </section>
+  );
+}
+
+function WhatWeChecked({ result, budget }: { result: NonNullable<RunStatus['result']>; budget: number }) {
+  const cov = result.coverage;
+  const total = result.seed.d_p;
+  const light = cov.reviewers_expanded < 15 || budget < 40;
+  const m = cov.max_shared_places;
+  return (
+    <section className="checked" aria-label="What we checked">
+      <h2>What we checked</h2>
+      <p>
+        Read {cov.reviewers_sampled.toLocaleString()} {total !== null ? `of ${total.toLocaleString()} ` : ''}reviews and
+        opened the full review history of {cov.reviewers_expanded} reviewers, {cov.places.toLocaleString()} places in all.
+      </p>
+      {m !== undefined && (cov.pairs_compared ?? 0) > 0 && (
+        <p>
+          Comparing those reviewers two at a time ({cov.pairs_compared} pairs), the most any two had in common was{' '}
+          <strong>{m} other place{m === 1 ? '' : 's'}</strong>.
+          {m <= 2 ? ' That is what unconnected people look like.' : ''}
+        </p>
+      )}
+      {light && (
+        <p className="light">
+          This was a light check. A budget of 60 or more follows more reviewers and gives a more reliable answer.
+        </p>
+      )}
+    </section>
+  );
+}
+
+function HowToRead() {
+  return (
+    <details className="how">
+      <summary>How to read this</summary>
+      <p>
+        Review sellers reuse the same accounts for many clients, so their accounts keep turning up together at the same
+        unrelated, little-known places. Nakshatra follows this place's reviewers to everything else they reviewed and
+        looks for such a group.
+      </p>
+      <p>
+        A group is reported only when randomly shuffled data almost never produces one as tight (under 1% of the time).
+        It then shows the rating with that group's reviews set aside. &ldquo;No coordination detected&rdquo; means the
+        reviewers it followed look like unconnected people. It is a statistical check, not a verdict about anyone.
+      </p>
+    </details>
   );
 }
 

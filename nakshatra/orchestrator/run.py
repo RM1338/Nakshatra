@@ -19,7 +19,7 @@ import httpx
 
 from nakshatra.algo import guards, lockstep, peel, prior, rating
 from nakshatra.algo.expander import Expander, Plateau
-from nakshatra.algo.judge import judge
+from nakshatra.algo.judge import judge, overlap_summary
 from nakshatra.errors import NakshatraError
 from nakshatra.graph import ingest as I
 from nakshatra.graph.model import Graph
@@ -366,7 +366,7 @@ class Run:
             credits={"budget": self.budget.total, "used": self.budget.billed, "cached": self.budget.cached},
             coverage={"reviewers_sampled": len(g.reviewers_of(self.seed)), "reviewers_expanded": expanded,
                       "places": len(g.places), "edges": len(g.edges), "low_coverage": self.low_coverage,
-                      "non_google_skipped": self.skipped_non_google},
+                      "non_google_skipped": self.skipped_non_google, **overlap_summary(g, self.seed)},
             rings=out_rings, rating={"displayed": S.rating, **rat}, config_hash=self.cfg.hash(),
             delta_days=c.time.delta_days, state=final)
         with self.store.tx():

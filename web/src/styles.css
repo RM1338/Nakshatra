@@ -117,7 +117,14 @@ button.link { border: 0; background: none; padding: 0; text-decoration: underlin
 .rating-note { font-size: var(--step--1); margin: 1rem 0 0; }
 .verdict { font-family: var(--serif); font-size: var(--step-1); line-height: 1.4; margin: 1.1rem 0; max-width: 40ch; }
 .badge-low { display: inline-block; margin: 0 0 1rem; padding: 0.15rem 0.6rem; border: 1px solid var(--marigold); border-radius: 999px; font-size: var(--step--1); }
-.coverage { font-size: var(--step--1); }
+.rating-note.gap { padding: 0.5rem 0.7rem; background: #fff; border-left: 3px solid var(--marigold); font-size: var(--step--1); }
+.checked { border-top: 1px solid var(--paper-edge); margin-top: 1.25rem; padding-top: 1rem; font-size: var(--step--1); }
+.checked h2 { font-size: var(--step-1); margin-bottom: 0.4rem; }
+.checked p { margin: 0 0 0.5rem; max-width: 52ch; }
+.checked .light { padding: 0.4rem 0.7rem; border-left: 3px solid var(--marigold); background: #fff; }
+.how { margin-top: 0.75rem; font-size: var(--step--1); }
+.how summary { cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.how p { max-width: 52ch; }
 
 .ring-card { border: 1px solid var(--paper-edge); border-left: 4px solid var(--ring); background: #fff; border-radius: 8px; padding: 0.9rem 1rem; margin-bottom: 0.9rem; }
 .ring-card.selected { box-shadow: 0 0 0 2px var(--ring); }

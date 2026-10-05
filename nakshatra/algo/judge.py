@@ -40,3 +40,15 @@ def judge(g: Graph, seed: int, baseline_dps: list[int], cfg: Any) -> list[Judged
                           lockstep.lockstep_ratio(g, r, cfg.time.delta_days, cfg.time.lockstep_share,
                                                   cfg.time.max_median_width_days)))
     return out
+
+
+def overlap_summary(g: Graph, seed: int) -> dict:
+    """What the crawl saw among followed reviewers, so a clean result still says something concrete:
+    how many pairs were compared and the most other places any two had in common (seed excluded)."""
+    users = sorted(u for u in range(len(g.users)) if g.users[u].expanded)
+    places = {u: g.uadj[u] - {seed} for u in users}
+    best = 0
+    for i, u in enumerate(users):
+        for v in users[i + 1:]:
+            best = max(best, len(places[u] & places[v]))
+    return {"pairs_compared": len(users) * (len(users) - 1) // 2, "max_shared_places": best}
