@@ -39,3 +39,8 @@ export function findPlaceId(s: string): string | null {
   const m = s.match(/0x[0-9a-f]+:0x[0-9a-f]+/i) ?? s.match(/\bChIJ[0-9A-Za-z_-]{10,}/);
   return m ? m[0] : null;
 }
+
+// Share-button links (maps.app.goo.gl/…) carry no ID until the server expands them.
+export function isShortLink(s: string): boolean {
+  return /https?:\/\/(maps\.app\.goo\.gl|goo\.gl\/maps)\/[A-Za-z0-9_-]+/i.test(s);
+}

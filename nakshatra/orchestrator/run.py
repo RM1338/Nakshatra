@@ -29,6 +29,7 @@ from nakshatra.report.templates import check_copy
 from nakshatra.serp import engines as E
 from nakshatra.serp.budget import Budget
 from nakshatra.serp.client import Response, SerpClient
+from nakshatra.serp.shortlink import expand as expand_short_link
 from nakshatra.settings import Config, Env, load_config
 from nakshatra.store.db import Store
 
@@ -423,6 +424,7 @@ async def run_once(place: str, budget: int, *, db: str | Path | None = None, off
                    cfg: Config | None = None, store: Store | None = None) -> dict[str, Any]:
     """Run one investigation to completion (CLI, tests, fixtures). Returns RunStatus."""
     env = Env()
+    place = await expand_short_link(place, offline or env.nakshatra_offline)
     store = store or Store(db or env.nakshatra_db)
     run = Run(store, cfg or load_config(), place, budget, offline or env.nakshatra_offline,
               env.serpapi_api_key if api_key is None else api_key, http=http,

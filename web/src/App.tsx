@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import GraphCanvas, { RING_COLORS } from './GraphCanvas';
-import { api, ApiError, findPlaceId } from './api';
+import { api, ApiError, findPlaceId, isShortLink } from './api';
 import { useRunStream } from './useRunStream';
 import type { EvidencePlace, Health, LedgerPage, Phase, PlaceCandidate, Problem, Ring, RunStatus, RunSummary } from './types';
 
@@ -31,7 +31,8 @@ export default function App() {
 // ---------- copy (UF §6, final unless marked) ----------
 function problemCopy(p: Problem): string {
   switch (p.code) {
-    case 'E_BAD_PLACE': return "That doesn't look like a Google Maps place link. Copy the link from the place's Share button.";
+    case 'E_BAD_PLACE': return p.message && /short link|full Maps link/i.test(p.message)
+      ? p.message : "That doesn't look like a Google Maps place link. Copy the link from the place's Share button.";
     case 'E_RUN_ACTIVE': return 'An investigation is already running.';
     case 'E_AUTH': return 'No SerpApi key found. You can replay cached runs offline, or add a key to .env.';
     case 'E_TOO_FEW_REVIEWS': return `${p.message}, which is too few to test for coordination.`;
@@ -64,6 +65,7 @@ function Home({ banner, go }: { banner?: string; go: (p: string, b?: string) => 
   const [busy, setBusy] = useState(false);
   const [picked, setPicked] = useState<string | null>(null);
   const id = findPlaceId(text);
+  const short = !id && isShortLink(text);
   // UF §3: offer cache-only runs when there is no key, or when this place was crawled before (0 credits).
   const cached = !!id && recent.some((r) => r.state === 'done' && r.seed_data_id?.toLowerCase() === id.toLowerCase());
   useEffect(() => { if (cached) setOffline(true); }, [cached]);
@@ -75,7 +77,7 @@ function Home({ banner, go }: { banner?: string; go: (p: string, b?: string) => 
 
   const start = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!id) { setProblem({ code: 'E_BAD_PLACE', message: '' }); return; }
+    if (!id && !short) { setProblem({ code: 'E_BAD_PLACE', message: '' }); return; }
     setBusy(true);
     setProblem(null);
     try {
@@ -112,8 +114,10 @@ function Home({ banner, go }: { banner?: string; go: (p: string, b?: string) => 
           <input id="place" autoFocus value={text} onChange={(e) => { setText(e.target.value); setProblem(null); setPicked(null); }}
                  placeholder="Paste a Google Maps link" autoComplete="off" spellCheck={false}
                  aria-describedby="place-help" aria-invalid={problem?.code === 'E_BAD_PLACE'} />
-          <p id="place-help" className={`helper ${problem ? 'is-error' : id ? 'is-ok' : ''}`} aria-live="polite">
-            {problem ? problemCopy(problem) : id ? (picked ? `Selected ${picked}. Ready to investigate.` : 'Found a place ID. Ready to investigate.') : ' '}
+          <p id="place-help" className={`helper ${problem ? 'is-error' : id || short ? 'is-ok' : ''}`} aria-live="polite">
+            {problem ? problemCopy(problem)
+              : id ? (picked ? `Selected ${picked}. Ready to investigate.` : 'Found a place ID. Ready to investigate.')
+              : short ? 'Short Maps link. It will be expanded when you start.' : ' '}
             {problem?.code === 'E_RUN_ACTIVE' && activeRun &&
               <> <a href={`/runs/${activeRun}`} onClick={(e) => { e.preventDefault(); go(`/runs/${activeRun}`); }}>View it</a></>}
           </p>

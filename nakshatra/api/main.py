@@ -23,7 +23,7 @@ from starlette.exceptions import HTTPException
 from nakshatra import __version__
 from nakshatra.errors import NakshatraError
 from nakshatra.orchestrator.events import TERMINAL_EVENTS
-from nakshatra.orchestrator.run import Run, parse_place, place_search, status_of
+from nakshatra.orchestrator.run import Run, expand_short_link, parse_place, place_search, status_of
 from nakshatra.report.dossier import render_md, render_pdf
 from nakshatra.settings import Config, Env, load_config
 from nakshatra.store.db import SCHEMA_VERSION, Store
@@ -131,13 +131,14 @@ def create_app(store: Store | None = None, cfg: Config | None = None, env: Env |
         if not st.cfg.budget.min <= budget <= st.cfg.budget.max:
             return envelope("E_BUDGET", f"budget must be between {st.cfg.budget.min} and {st.cfg.budget.max}",
                             {"field": "budget", "min": st.cfg.budget.min, "max": st.cfg.budget.max})
-        parse_place(body.place)  # E_BAD_PLACE before anything is written
         if (active := st.active_run()) is not None:
             return envelope("E_RUN_ACTIVE", "An investigation is already running.", run_id=active)
         offline = body.offline or st.env.nakshatra_offline
+        place = await expand_short_link(body.place, offline)  # maps.app.goo.gl/… share links
+        parse_place(place)  # E_BAD_PLACE before anything is written
         if not offline and not st.env.serpapi_api_key:
             return envelope("E_AUTH", "No SerpApi key found. Replay cached runs offline, or add a key to .env.")
-        run = Run(st.store, st.cfg, body.place, budget, offline, st.env.serpapi_api_key, **st.run_kwargs())
+        run = Run(st.store, st.cfg, place, budget, offline, st.env.serpapi_api_key, **st.run_kwargs())
         st.runs[run.id] = run
         task = asyncio.create_task(run.execute())
         st.tasks.add(task)
