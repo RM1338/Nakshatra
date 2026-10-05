@@ -207,11 +207,12 @@ class Store:
 
     # ---------- rings / results ----------
     def ring_put(self, run_id: str, idx: int, members: list[str], places: list[str], density: float,
+                 # members in pseudonym order (R1, R2, ...), aligned with the result's ring members (DECISIONS D12)
                  exp_overlap: float, obs_overlap: float, pval: float, lockstep_ratio: float | None,
                  reported: bool) -> None:
         self.conn.execute(
             "INSERT INTO rings VALUES (?,?,?,?,?,?,?,?,?,?)",
-            (run_id, idx, json.dumps(sorted(members)), json.dumps(sorted(places)), density, exp_overlap,
+            (run_id, idx, json.dumps(members), json.dumps(sorted(places)), density, exp_overlap,
              obs_overlap, pval, lockstep_ratio, int(reported)))
 
     def result_put(self, run_id: str, result_json: str) -> None:

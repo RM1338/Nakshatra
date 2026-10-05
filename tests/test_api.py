@@ -165,3 +165,22 @@ def test_cancel_gives_partial_result(tmp_path):
         assert_envelope(c.post(f"/api/v1/runs/{rid}/cancel"), 409, "E_RUN_TERMINAL")
         assert_envelope(c.post("/api/v1/runs/r_ffffffffff/cancel"), 404, "E_NOT_FOUND")
         assert c.get(f"/api/v1/runs/{rid}/rings/9/evidence").status_code == 404  # partial is readable
+
+
+def test_dossier(done_run):
+    c, rid, st = done_run
+    r = c.get(f"/api/v1/runs/{rid}/dossier?format=md")
+    assert r.status_code == 200 and r.headers["content-type"].startswith("text/markdown")
+    assert f'nakshatra-{rid}.md' in r.headers["content-disposition"]
+    md = r.text
+    for h in ("## 1. Summary", "## 2. Seed place", "## 3. Method and parameters", "## 4. Coordinated groups",
+              "## 5. Statistical evidence", "## 6. Credit ledger", "## 7. Limitations"):
+        assert h in md
+    assert "contributor IDs" in md.splitlines()[2]  # the reporting-only warning comes first
+    ring = next(x for x in st["result"]["rings"] if x["reported"])
+    shown = {line.split("|")[2].strip() for line in md.splitlines() if line.startswith("| R")
+             and line.split("|")[2].strip().isdigit() and len(line.split("|")[2].strip()) > 15}
+    assert len(shown) == len(ring["members"]) and len(shown & W.ring_cids) >= 8  # raw IDs only here, mapped right
+    assert_envelope(c.get(f"/api/v1/runs/{rid}/dossier?format=docx"), 415, "E_FORMAT")
+    pdf = c.get(f"/api/v1/runs/{rid}/dossier?format=pdf")
+    assert (pdf.status_code == 200 and pdf.content[:4] == b"%PDF") or pdf.json()["error"]["code"] == "E_PDF_UNAVAILABLE"

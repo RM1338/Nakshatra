@@ -15,7 +15,7 @@ from typing import Any
 
 from fastapi import APIRouter, FastAPI, Header, Query, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
+from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.exceptions import HTTPException
@@ -24,6 +24,7 @@ from nakshatra import __version__
 from nakshatra.errors import NakshatraError
 from nakshatra.orchestrator.events import TERMINAL_EVENTS
 from nakshatra.orchestrator.run import Run, parse_place, status_of
+from nakshatra.report.dossier import render_md, render_pdf
 from nakshatra.settings import Config, Env, load_config
 from nakshatra.store.db import SCHEMA_VERSION, Store
 
@@ -224,6 +225,24 @@ def create_app(store: Store | None = None, cfg: Config | None = None, env: Env |
         if ring is None:
             raise NakshatraError("E_NOT_FOUND", f"run {run_id} has no ring {idx}")
         return {"run_id": run_id, "idx": idx, "places": ring.get("evidence", [])}
+
+    @r.get("/runs/{run_id}/dossier")
+    async def dossier(run_id: str, request: Request, format: str = Query("md")) -> Response:
+        st = S(request)
+        row = row_or_404(st, run_id)
+        if format not in ("md", "pdf"):
+            raise NakshatraError("E_FORMAT", "format must be md or pdf")
+        if row["state"] in ACTIVE or st.store.result_get(run_id) is None:
+            raise NakshatraError("E_RUN_NOT_DONE", "the result is not ready")
+        md = render_md(st.store, run_id)
+        name = f'attachment; filename="nakshatra-{run_id}.{format}"'
+        if format == "md":
+            return Response(md, media_type="text/markdown; charset=utf-8", headers={"Content-Disposition": name})
+        try:
+            pdf = await asyncio.to_thread(render_pdf, md)
+        except (ImportError, OSError) as e:
+            raise NakshatraError("E_PDF_UNAVAILABLE", "PDF export needs WeasyPrint: uv sync --extra pdf") from e
+        return Response(pdf, media_type="application/pdf", headers={"Content-Disposition": name})
 
     @r.get("/runs/{run_id}/ledger")
     async def ledger(run_id: str, request: Request, limit: int = Query(200, ge=1, le=500),

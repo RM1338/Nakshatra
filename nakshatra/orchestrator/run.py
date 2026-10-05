@@ -370,7 +370,7 @@ class Run:
             delta_days=c.time.delta_days, state=final)
         with self.store.tx():
             for (r, st, p_perm, ok, lock), o in zip(scored, out_rings, strict=True):
-                self.store.ring_put(self.id, o["idx"], [cids[u] for u in r.users],
+                self.store.ring_put(self.id, o["idx"], [cids[u] for u in sorted(r.users, key=lambda u: int(names[u][1:]))],
                                     [g.places[p].data_id for p in r.places], r.density, st["null_overlap"],
                                     st["observed_overlap"], p_perm, lock, ok)
                 if ok:  # excerpts are kept only for ring members' ring-place reviews (DM §8)

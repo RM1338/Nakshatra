@@ -381,6 +381,7 @@ function ResultPanel({ result, status, selectedRing, setSelectedRing, openPlace,
         </div>
       )}
       <div className="toolbar">
+        <ExportMenu runId={status.run_id} />
         <button onClick={openLedger}>Ledger</button>
         <button onClick={() => rerun(true)}>Replay offline</button>
         {status.credits.used > 0 && <button onClick={() => rerun(false, 40)}>Rerun with a bigger budget</button>}
@@ -493,6 +494,41 @@ function RingCard({ ring, n, color, selected, onSelect, openPlace }: {
       )}
       <p className="explain muted">{ring.explanation}</p>
     </article>
+  );
+}
+
+// ---------- export with the reporting guardrail (UF §5, Flow B) ----------
+function ExportMenu({ runId }: { runId: string }) {
+  const [open, setOpen] = useState(false);
+  const [acked, setAcked] = useState(() => {
+    try { return sessionStorage.getItem('nk-dossier-ack') === '1'; } catch { return false; }
+  });
+  const ack = () => {
+    try { sessionStorage.setItem('nk-dossier-ack', '1'); } catch { /* private mode: ask again next time */ }
+    setAcked(true);
+  };
+  return (
+    <>
+      <button onClick={() => setOpen(true)} aria-haspopup="dialog">Export dossier</button>
+      {open && (
+        <div className="drawer" role="dialog" aria-modal="true" aria-labelledby="export-title">
+          <button className="drawer-close" onClick={() => setOpen(false)} autoFocus>Close</button>
+          <h2 id="export-title">Export the evidence</h2>
+          <p>The dossier lists every coordinated group with each account, the shared places and dates, the statistics,
+             and every SerpApi search behind them.</p>
+          <p className="banner">This file contains Google Maps contributor IDs. Use it for reporting to Google or a
+             consumer authority, not for publication.</p>
+          {!acked ? (
+            <button className="primary" onClick={ack}>I understand</button>
+          ) : (
+            <div className="toolbar">
+              <a className="button primary" href={`/api/v1/runs/${runId}/dossier?format=md`} download>Download Markdown</a>
+              <a className="button" href={`/api/v1/runs/${runId}/dossier?format=pdf`} download>Download PDF</a>
+            </div>
+          )}
+        </div>
+      )}
+    </>
   );
 }
 

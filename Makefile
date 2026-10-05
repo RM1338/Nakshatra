@@ -16,8 +16,8 @@ replay: web         ## Judge mode: shipped data/demo.db, offline forced, no key,
 	SERPAPI_API_KEY= NAKSHATRA_OFFLINE=1 NAKSHATRA_DB=data/replay.db \
 	  uv run uvicorn nakshatra.api.main:app --host 127.0.0.1 --port 8000
 
-install:            ## Python + web deps
-	uv sync
+install:            ## Python (+ optional PDF export) + web deps
+	uv sync --extra pdf
 	cd web && npm install --silent
 
 test:               ## Unit, contract and end-to-end tests (never call SerpApi)
