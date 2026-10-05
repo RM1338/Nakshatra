@@ -37,7 +37,8 @@ def main(argv=None) -> None:
         "", "Stress grid (8 × 8, camouflage 0.3), recall by coverage × place popularity:", "",
     ]
     lines += [f"- {k}: {v['recall']:.2f}" for k, v in sorted(inj["stress_8x8_camo0.3"].items())]
-    lines += ["", f"Suggested calibration (not yet frozen): {ctl['suggested']}", "", f"Wall time {time.time() - t0:.0f}s"]
+    lines += ["", f"Calibration suggested by the controls: {ctl['suggested']} (frozen values: config.yaml)", "",
+              f"Wall time {time.time() - t0:.0f}s"]
     p = out_path("summary", cfg, "md")
     p.write_text("\n".join(lines) + "\n")
     print("\n".join(lines))

@@ -86,7 +86,7 @@ Never-cut items (MVP §3): **M5, M6, M11**.
 | M9 / IF-1..6 / RP-2,3 | Result screen: rating card, verdict, ring cards, graph, place drawer | Flow A1–A9 in the browser | `web`, `report` | done (**G3** Oct 5; checked by scripted headless-Chromium screenshots, real + synthetic runs) |
 | M10 / NF-6 | Offline replay from `demo.db` | Clean clone, no key: replay identical (B3), 0 network calls | `store.export_demo`, `orchestrator` | done (`test_replay`; `make replay`; 6.2 s replay) |
 | **M11** / FR22 / OP-4 / NF-7..10 | Evaluation harness | `make eval` reproduces committed plots (injection grid, controls, null calibration, credit efficiency) | `eval/` | done; results under `eval/plots/*_<config hash>` |
-| M12 | README | Insight, prior art, integration map, method, results, limitations, demo | `README.md` | todo |
+| M12 | README | Insight, prior art, integration map, method, results, limitations, demo | `README.md` | done (Oct 5) |
 | NF-11..14 | Security, privacy, copy | Key grep test; localhost bind; banned-word lint | cross-cutting | done (key, copy, `make dev` binds 127.0.0.1) |
 | DM §5.3 | Integrity check | `python -m nakshatra.store.check` returns 0 rows | `store.check` | done (`test_store`, `test_e2e_slice`) |
 

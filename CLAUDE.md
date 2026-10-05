@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Status
 
-Built: data layer, SerpApi client, graph, algorithms, orchestrator + CLI, HTTP API/SSE (`nakshatra/api/main.py`) and the eval harness (`eval/`). See `docs/IMPLEMENTATION_PLAN.md` for status. Still to do: web UI, dossier/cancel/place search, calibration on real controls, demo.db, README. Work follows `docs/Nakshatra Development Plan.md` (tasks T01–T41, submission Oct 10, 2026). Commit messages start with the task ID (`T13: weighted peeling with trimming`); `main` must always run. Record every deviation from the docs in `docs/DECISIONS.md`, in the same commit.
+All Musts are built: SerpApi client, graph, algorithms, orchestrator + CLI, HTTP API/SSE (`nakshatra/api/main.py`), web UI (`web/`), eval harness (`eval/`), `data/demo.db` + `make replay`, README. Config frozen (hash `8dfd7dcb`; changing `config.yaml` invalidates `eval/plots/`). See `docs/IMPLEMENTATION_PLAN.md`. Remaining: Should items (dossier export, cancel, ring guards), demo recording and submission (user). Work follows `docs/Nakshatra Development Plan.md` (tasks T01–T41, submission Oct 10, 2026). Commit messages start with the task ID (`T13: weighted peeling with trimming`); `main` must always run. Record every deviation from the docs in `docs/DECISIONS.md`, in the same commit.
 
 Nakshatra: a local app that takes one Google Maps place, spends a fixed SerpApi credit budget (default 60) crawling reviewers via the Contributor Reviews engine, finds coordinated reviewer rings with weighted dense-subgraph peeling, tests them with a permutation gate plus a Poisson display statistic, and shows a ring-adjusted rating.
 
@@ -25,10 +25,13 @@ uv run python -m nakshatra.cli <maps-url|data_id> --budget 60 [--offline] [--db 
 uv run python -m nakshatra.store.check [db]         # integrity check (Data Model §5.3), must print zeros
 NAKSHATRA_DB=data/dev.db make synth       # crawl the synthetic SerpApi city into a dev DB (no key needed)
 make dev                                  # API on 127.0.0.1:8000 (docs at /api/v1/docs)
-make eval                                 # injection, controls, null calibration, credit efficiency -> eval/plots/ (~30 min)
+make eval                                 # injection, controls, null calibration, credit efficiency -> eval/plots/ (~20 min)
+make replay                               # judge mode: data/demo.db, no key, offline forced, :8000
+make demo / make dev                      # built SPA on :8000 / API :8000 + Vite :5173
+cd web && npx tsc -b                      # typecheck the UI
 ```
 
-`SERPAPI_API_KEY` is in `.env` (git-ignored). It is a **Free Plan: 250 searches/month, scarce.** Never spend live credits without the user's go-ahead; follow the allocation in DECISIONS A19. The SerpApi `/account` endpoint is free for checking the balance. `tests/synth_world.py` is a deterministic fake SerpApi (a city with a planted ring), served through an httpx `MockTransport`. Use it for tests and dev data.
+`SERPAPI_API_KEY` is in `.env` (git-ignored). It is a **Free Plan: 250 searches/month, scarce.** Never spend live credits without the user's go-ahead; follow the allocation in DECISIONS A19. The SerpApi `/account` endpoint is free for checking the balance. `tests/synth_world.py` is a deterministic fake SerpApi (a city with a planted ring), served through an httpx `MockTransport`. Use it for tests and dev data. For UI checks, start the server with `SERPAPI_API_KEY=` (blank) so scripted clicks can never spend credits. Screenshots: system `/usr/bin/chromium` driven by playwright-core (the Playwright MCP's bundled Chrome is not installed).
 
 ## Architecture
 
