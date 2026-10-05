@@ -20,14 +20,17 @@ from nakshatra.settings import Env
 from nakshatra.store.db import Store
 
 MAX_BYTES = 50 * 1024 * 1024
-DROP_KEYS = frozenset({"snippet", "extracted_snippet", "translated_snippet", "user_reviews", "details", "response",
+DROP_KEYS = frozenset({"extracted_snippet", "translated_snippet", "user_reviews", "details", "response",
                        "phone", "website", "booking_link", "address"})
+TEXT_KEYS = frozenset({"snippet"})  # review text: the words go, the fact that there was text stays (health checks)
+TEXT_PLACEHOLDER = "[text removed]"
 KEY_PATTERN = re.compile(rb"api_key=[0-9a-f]{32,}", re.I)
 
 
 def minimise(obj):
     if isinstance(obj, dict):
-        return {k: minimise(v) for k, v in obj.items() if k not in DROP_KEYS}
+        return {k: (TEXT_PLACEHOLDER if v else v) if k in TEXT_KEYS else minimise(v)
+                for k, v in obj.items() if k not in DROP_KEYS}
     if isinstance(obj, list):
         return [minimise(v) for v in obj]
     return obj

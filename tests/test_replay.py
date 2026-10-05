@@ -46,7 +46,8 @@ def test_export_is_minimal_and_clean(demo):
     assert all(not v for v in violations(s).values())
     assert {r[0] for r in s.conn.execute("SELECT run_id FROM runs")} == {st["run_id"] for _, st in runs}
     for (resp,) in s.conn.execute("SELECT response_json FROM serp_cache"):
-        assert '"snippet"' not in resp and '"name"' not in resp and '"thumbnail"' not in resp
+        assert '"name"' not in resp and '"thumbnail"' not in resp
+        assert all(v in ("", "[text removed]") for v in __import__("re").findall(r'"snippet":"([^"]*)"', resp))
     excerpts = s.conn.execute("SELECT COUNT(*) FROM edges WHERE excerpt IS NOT NULL").fetchone()[0]
     ring_edges = s.conn.execute("""SELECT COUNT(*) FROM v_ring_evidence v JOIN rings r USING (run_id, idx)
                                    WHERE r.reported = 1""").fetchone()[0]

@@ -19,7 +19,8 @@ import httpx
 
 from nakshatra.algo import guards, lockstep, peel, prior, rating
 from nakshatra.algo.expander import Expander, Plateau
-from nakshatra.algo.judge import judge, overlap_summary
+from nakshatra.algo.health import Review, review_health
+from nakshatra.algo.judge import followed_reviewers, judge, overlap_summary
 from nakshatra.errors import NakshatraError
 from nakshatra.graph import ingest as I
 from nakshatra.graph.model import Graph
@@ -369,6 +370,13 @@ class Run:
                       "non_google_skipped": self.skipped_non_google, **overlap_summary(g, self.seed)},
             rings=out_rings, rating={"displayed": S.rating, **rat}, config_hash=self.cfg.hash(),
             delta_days=c.time.delta_days, state=final)
+        result["health"] = review_health(self._newest_reviews(), S.rating)
+        ring_of = {u: o["idx"] for (r, *_), o in zip(scored, out_rings, strict=True) if o["reported"] for u in r.users}
+        rows = []
+        for row in followed_reviewers(g, self.seed):
+            u = row.pop("u")
+            rows.append({"member": names.get(u, "?"), "stream_id": self.sid(u), "ring": ring_of.get(u), **row})
+        result["reviewers"] = sorted(rows, key=lambda x: int(x["member"][1:]) if x["member"][1:].isdigit() else 1 << 30)
         with self.store.tx():
             for (r, st, p_perm, ok, lock), o in zip(scored, out_rings, strict=True):
                 self.store.ring_put(self.id, o["idx"], [cids[u] for u in sorted(r.users, key=lambda u: int(names[u][1:]))],
@@ -381,6 +389,15 @@ class Run:
                                 self.store.set_excerpt(cids[u], g.places[p].data_id, g.edges[(u, p)].snippet)
             self.store.result_put(self.id, json.dumps(result, sort_keys=True, separators=(",", ":")))
         self.result = result
+
+    def _newest_reviews(self) -> list[Review]:
+        """The newestFirst sample (unbiased by sort order, ALG §7.2) as health-check inputs."""
+        g = self.g
+        out = []
+        for u, stars in sorted(self.newest.items(), key=lambda x: g.users[x[0]].contributor_id):
+            e = g.edges[(u, self.seed)]
+            out.append(Review(stars, e.t_lo if e.exact else None, g.users[u].k_u, bool(e.snippet)))
+        return out
 
     def _guards(self, r: peel.Ring) -> dict:
         gd = guards.ring_guards(self.g, r)

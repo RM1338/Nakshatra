@@ -52,3 +52,23 @@ def overlap_summary(g: Graph, seed: int) -> dict:
         for v in users[i + 1:]:
             best = max(best, len(places[u] & places[v]))
     return {"pairs_compared": len(users) * (len(users) - 1) // 2, "max_shared_places": best}
+
+
+def followed_reviewers(g: Graph, seed: int) -> list[dict]:
+    """One row per followed reviewer: their activity and how much they overlap with the other followed reviewers."""
+    users = sorted(u for u in range(len(g.users)) if g.users[u].expanded)
+    places = {u: g.uadj[u] - {seed} for u in users}
+    seen_by: dict[int, int] = {}
+    for u in users:
+        for p in places[u]:
+            seen_by[p] = seen_by.get(p, 0) + 1
+    rows = []
+    for u in users:
+        e = g.edges.get((u, seed))
+        rows.append({"u": u, "reviews_total": max(g.users[u].k_u or 0, len(g.uadj[u])),
+                     "local_guide": g.users[u].local_guide,
+                     "rating_here": e.rating if e else None, "t_here": e.t_lo if e and e.exact else None,
+                     "places_reviewed": len(places[u]),
+                     "places_shared": sum(seen_by[p] >= 2 for p in places[u]),
+                     "most_with_one": max((len(places[u] & places[v]) for v in users if v != u), default=0)})
+    return rows

@@ -6,7 +6,7 @@ SerpApi India Hackathon 2026 · Track: Travel & Local Discovery
 
 ![A synthetic crew found: 10 accounts sharing 8 obscure places; rating 4.8 shown, 3.7 after setting them aside](docs/img/result-ring.png)
 
-*Screenshot of the synthetic demo city (clearly labelled), where a crew of 10 accounts was planted. The three real Coimbatore places we could afford to crawl all came back clean; see [Results](#results).*
+*The synthetic demo city (clearly labelled), where a crew of 10 accounts was planted. On real places, the review-health checks below are what usually speak up; see [Results](#results).*
 
 ## Why this needs SerpApi
 
@@ -46,7 +46,7 @@ No link to hand? "or search a place" on the home screen finds candidates by cate
 make demo          # build the UI, serve everything on http://127.0.0.1:8000
 make dev           # API with reload on :8000 + Vite on http://localhost:5173
 uv run python -m nakshatra.cli "<google maps link or data_id>" --budget 60 [--offline]
-make test          # 143 tests; none of them calls SerpApi
+make test          # 148 tests; none of them calls SerpApi
 make eval          # every evaluation below, from cache and synthetic data (0 credits, ~20 min)
 ```
 
@@ -62,7 +62,8 @@ The server binds to `127.0.0.1` only. There are no accounts and no hosting.
 4. **Mine.** Popularity-weighted densest-subgraph peeling, as in FRAUDAR (Hooi et al., KDD 2016), with one adaptation: column weights use each place's **global** review count from Maps (c_p = 1/log(d_p + 5)), not its degree in the crawled slice. Reviews of a temple with 5,000 reviews barely count; reviews of a tile shop with 31 count a lot. That defeats camouflage. The seed place itself is excluded.
 5. **Test.** The decision is a **selection-aware permutation test**. Rewire the *crawled* graph 200–500 times, keeping every account's and every place's number of reviews, and rerun the same miner. A group is reported only if fewer than 1% of the rewired graphs produce one as dense. The "expected by chance" figure on screen comes from the same rewired graphs.
 6. **Timing.** Relative dates ("2 months ago") become intervals. Real data shows Google rounds them *down*, by calendar month and year. The largest group of members who posted within 14 days of each other comes from an exact sweep line over those intervals. When dates are too coarse, the app says so instead of guessing.
-7. **Adjusted rating.** From the `newestFirst` sample only, down-weight reported members' reviews (fully, for dense groups), shrink toward the neighbourhood category mean (κ = 5), and bootstrap a 95% interval with a fixed seed.
+7. **Review health.** On every place, the newest reviews are checked against themselves. Do brand-new accounts (≤ 2 reviews ever) rate it far higher than experienced reviewers (10+)? Are most recent reviews from brand-new accounts? Is there a burst, such as 20 five-star reviews in 3 days, where the place's own pace predicts one? This catches the commonest pattern, single-use accounts, which no crew detector can see. These are observations, never verdicts. They cost no extra credits.
+8. **Adjusted rating.** From the `newestFirst` sample only, down-weight reported members' reviews (fully, for dense groups), shrink toward the neighbourhood category mean (κ = 5), and bootstrap a 95% interval with a fixed seed.
 
 No LLM is involved in any of this. Every number traces to SerpApi calls in the ledger and a formula in [Core Algorithm Design](docs/Nakshatra%20Core%20Algorithm%20Design.md).
 
@@ -87,9 +88,13 @@ Detection is reliable when crew members cover most of their shared places (85%),
 | | |
 | --- | --- |
 | ![Recall heatmaps](eval/plots/injection_recall_8dfd7dcb.png) | ![Credit efficiency](eval/plots/credit_efficiency_8dfd7dcb.png) |
-| ![Null calibration](eval/plots/null_calibration_8dfd7dcb.png) | ![A clean real place](docs/img/result-clean.png) |
+| ![Null calibration](eval/plots/null_calibration_8dfd7dcb.png) | |
 
-**Real places.** The Free Plan allows 250 searches a month. That covered 2 fertility clinics in Coimbatore (84 and 431 reviews) and 2 landmark controls (Gass Forest Museum, Valankulam Boat House): 84 searches in total, including 8 for field-shape checks and place discovery. All four came back "No coordination detected". We make no claim about any real business. The planted-crew demo is synthetic and labelled as such everywhere it appears.
+**Real places, review health.** Both real clinics we checked showed patterns worth a look, and both landmark controls showed nothing unusual. one clinic received **23 five-star reviews within 3 days** (its usual pace predicts about one), with 54% of recent reviews from brand-new accounts. At another, brand-new accounts rated it **4.7 while experienced reviewers rated it 4.2**. We don't name the clinics: these are statistical observations, not findings about anyone's intent.
+
+![A control place: nothing unusual found](docs/img/result-clean.png)
+
+**Real places, crews.** The Free Plan allows 250 searches a month. That covered 2 fertility clinics in Coimbatore (84 and 431 reviews) and 2 landmark controls (Gass Forest Museum, Valankulam Boat House): 84 searches in total, including 8 for field-shape checks and place discovery. None showed a coordinated crew of reused accounts. We make no claim about any real business. The planted-crew demo is synthetic and labelled as such everywhere it appears.
 
 ## Prior art and what is new
 

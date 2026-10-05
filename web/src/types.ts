@@ -27,6 +27,19 @@ export interface Result {
   rating: { displayed: number | null; adjusted: number | null; ci: [number | null, number | null];
             sample_mean: number | null; n_sampled: number; set_aside?: number };
   verdict?: string; no_coordination_message: string | null; config_hash: string;
+  health?: Health_;
+  reviewers?: FollowedReviewer[];
+}
+export interface Health_ {
+  n: number; avg_recent: number | null; displayed: number | null; n_known: number; n_new: number;
+  new_share: number | null; rating_new: number | null; n_experienced: number; rating_experienced: number | null;
+  five_star_share_new: number | null; no_text_share_new: number | null;
+  burst: { count: number; start: number; end: number; expected: number; five_star: number; new_accounts: number } | null;
+  flags: ('experience_gap' | 'new_accounts' | 'burst' | 'recent_gap')[];
+}
+export interface FollowedReviewer {
+  member: string; stream_id: string; ring: number | null; reviews_total: number; local_guide: boolean;
+  rating_here: number | null; t_here: number | null; places_reviewed: number; places_shared: number; most_with_one: number;
 }
 export interface RunStatus {
   run_id: string; state: Phase; started_at: number; ended_at: number | null;
