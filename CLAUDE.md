@@ -26,7 +26,7 @@ uv run python -m nakshatra.store.check [db]         # integrity check (Data Mode
 NAKSHATRA_DB=data/dev.db make synth       # crawl the synthetic SerpApi city into a dev DB (no key needed)
 ```
 
-There is no SerpApi key yet. `tests/synth_world.py` is a deterministic fake SerpApi (a city with a planted ring), served through an httpx `MockTransport`. Use it for any test or dev data. Live runs need `SERPAPI_API_KEY` in `.env`.
+`SERPAPI_API_KEY` is in `.env` (git-ignored). It is a **Free Plan: 250 searches/month, scarce.** Never spend live credits without the user's go-ahead; follow the allocation in DECISIONS A19. The SerpApi `/account` endpoint is free for checking the balance. `tests/synth_world.py` is a deterministic fake SerpApi (a city with a planted ring), served through an httpx `MockTransport`. Use it for tests and dev data.
 
 ## Architecture
 

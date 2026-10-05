@@ -155,4 +155,4 @@ All four are automated in `tests/test_e2e_slice.py`. **Status: done (Oct 5).** S
 
 ## 8. Blocked on the user
 
-- ~~T01: SerpApi key~~ added Oct 5. Credits used so far: 33.
+- ~~T01: SerpApi key~~ added Oct 5: Free Plan, 250/month, 217 left after G1. Running on the MVP §6 fallback (DECISIONS A19).
