@@ -74,6 +74,7 @@ class Run:
         self.newest: dict[int, float] = {}  # user -> rating, from newestFirst pages only (ALG §7.2)
         self.ex: Expander | None = None
         self.low_coverage = False
+        self.best_ring: peel.Ring | None = None
         self.cancel_requested = False
         self.skipped_non_google = 0
         self.result: dict | None = None
@@ -233,7 +234,7 @@ class Run:
         s0 = prior.priors(g, self.seed, c.prior.weights)
         ex = self.ex = Expander(g, s0, c.expand.hot_boost)
         plateau = Plateau(c.expand.plateau_eps, c.expand.plateau_window)
-        n, best_prev, stopped = 0, None, "queue"
+        n, stopped = 0, "queue"
         while not self.cancel_requested:
             if self.budget.left("expand", "refine") == 0:
                 stopped = "budget"
@@ -258,28 +259,42 @@ class Run:
                 self._warn("E_TRUNCATED", f"{self.sid(u)} hit the 200-review cap")
             n += 1
             if n % c.expand.refine_every == 0 and self.budget.remaining["refine"] > 0:
-                await self._refine(s0)
-            rings = await asyncio.to_thread(peel.find_rings, g, self.seed, c.ring.min_users, c.ring.min_places,
-                                            c.ring.min_coverage, 1)
-            best = rings[0].density if rings else 0.0
-            if rings and (best_prev is None or best != best_prev):
-                self.bus.emit("ring_update", {"ring_idx": 0, "members": [self.sid(x) for x in rings[0].users],
-                                              "places": [g.places[x].data_id for x in rings[0].places],
-                                              "density": round(best, 4)})
-            best_prev = best
+                await self._refine(s0, "refine")
+            best = await self._repeel()
             if plateau.update(best):
                 stopped = "plateau"
                 break
         self.low_coverage = self.cancel_requested or stopped == "budget"
+        # Leftover credits buy d_p and exact dates for the best ring's places (DECISIONS C3).
+        while self.best_ring and not self.cancel_requested and self.budget.left("expand", "refine") > 0:
+            pool = "refine" if self.budget.remaining["refine"] > 0 else "expand"
+            if not await self._refine(s0, pool, only_ring=True):
+                break
+            await self._repeel()
 
-    async def _refine(self, s0: dict[int, float]) -> None:
-        """Hot-place refinement: exact dates for ring edges and new co-reviewers (ALG §4.2, SRS-CR-7)."""
+    async def _repeel(self) -> float:
+        c, g = self.cfg, self.g
+        rings = await asyncio.to_thread(peel.find_rings, g, self.seed, c.ring.min_users, c.ring.min_places,
+                                        c.ring.min_coverage, 1)
+        prev, self.best_ring = self.best_ring, rings[0] if rings else None
+        if self.best_ring and (prev is None or (prev.users, prev.places, prev.density) !=
+                               (self.best_ring.users, self.best_ring.places, self.best_ring.density)):
+            self.bus.emit("ring_update", {"ring_idx": 0, "members": [self.sid(x) for x in self.best_ring.users],
+                                          "places": [g.places[x].data_id for x in self.best_ring.places],
+                                          "density": round(self.best_ring.density, 4)})
+        return self.best_ring.density if self.best_ring else 0.0
+
+    async def _refine(self, s0: dict[int, float], pool: str, only_ring: bool = False) -> bool:
+        """Hot-place refinement: d_p, exact dates and new co-reviewers in one call (ALG §4.2, SRS-CR-6/7)."""
         ex, g = self.ex, self.g
-        p = ex.next_refine(self.seed)
+        prefer = self.best_ring.places if self.best_ring else []
+        if only_ring and not any(p not in ex.refined and g.places[p].d_p is None for p in prefer):
+            return False
+        p = ex.next_refine(self.seed, prefer)
         if p is None:
-            return
+            return False
         self._phase("refining")
-        tok = self.budget.reserve("refine")
+        tok = self.budget.reserve(pool)
         try:
             resp = await E.place_reviews(self.client, tok, g.places[p].data_id, "newestFirst", None)
         except NakshatraError as e:
@@ -295,6 +310,7 @@ class Run:
                 if g.edges[(v, p)].rating >= 4:
                     ex.push(v, s0.get(v, 0.5), len(g.uadj[v] & hot.keys()))
         self._phase("expanding")
+        return True
 
     async def _mine_and_report(self) -> None:
         self._phase("mining")

@@ -21,14 +21,14 @@ NOW = 1_790_000_000.0  # fixed "now" of the synthetic world (2026-09-21)
 
 
 def _rel(age_days: float) -> str:
+    """Google's format: floor to whole units, calendar months and years (DECISIONS C6)."""
     if age_days < 1:
         return f"{max(1, int(age_days * 24))} hours ago"
-    for unit, size, limit in (("day", 1, 7), ("week", 7, 30), ("month", 30, 365)):
+    for unit, size, limit in (("day", 1, 7), ("week", 7, 30.44), ("month", 30.44, 365.25), ("year", 365.25, 1e9)):
         if age_days < limit:
-            n = int(age_days // size) if unit == "day" else max(1, round(age_days / size))
+            n = int(age_days // size)
             return f"a {unit} ago" if n == 1 else f"{n} {unit}s ago"
-    n = int(age_days // 365)
-    return "a year ago" if n == 1 else f"{n} years ago"
+    raise AssertionError
 
 
 def _iso(t: float) -> str:
@@ -131,6 +131,12 @@ class World:
                 "reviews": P["d_p"], "gps_coordinates": {"latitude": P["lat"], "longitude": P["lng"]},
                 "thumbnail": "https://example.invalid/photo.jpg"}
 
+    def _place_info(self, p: int) -> dict:
+        """Contributor feed place_info: no review count, as on real SerpApi (DECISIONS C3)."""
+        P = self.places[p]
+        return {"title": P["title"], "address": "Coimbatore", "type": P["type"], "data_id": P["data_id"],
+                "gps_coordinates": {"latitude": P["lat"], "longitude": P["lng"]}}
+
     def _meta(self) -> dict:
         self.calls += 1
         return {"search_metadata": {"id": f"synth{self.calls:06d}", "status": "Success"}}
@@ -173,7 +179,7 @@ class World:
                     "reviews": [{"rating": self.reviews[(u, p)]["rating"],
                                  "date": _rel((NOW - self.reviews[(u, p)]["t"]) / DAY),
                                  "snippet": f"review {u}-{p}", "review_id": f"rv{u}x{p}",
-                                 "place_info": self._place_json(p)} for p in ps]}
+                                 "place_info": self._place_info(p)} for p in ps]}
         return {"search_metadata": {"status": "Error"}, "error": f"unknown engine {engine}"}
 
     def _review(self, u: int, p: int) -> dict:

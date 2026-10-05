@@ -18,7 +18,7 @@ CHECKS = {
         SELECT run_id FROM events GROUP BY run_id HAVING MAX(seq) <> COUNT(*)""",
     "D8 results present exactly for done runs": """
         SELECT r.run_id FROM runs r LEFT JOIN results x USING (run_id)
-        WHERE (r.state = 'done') <> (x.run_id IS NOT NULL)""",
+        WHERE (r.state = 'done') <> (x.run_id IS NOT NULL) AND r.run_id <> 'r_0000000000'""",  # sentinel, API §5.4
 }
 
 

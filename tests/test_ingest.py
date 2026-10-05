@@ -27,7 +27,7 @@ def test_place_and_contributor():
     assert U.expanded and U.truncated == (len(W.by_user[heavy]) >= 200)
     assert len(d.edges) == min(200, len(W.by_user[heavy]))
     assert all(not g.edges[k].exact for k in d.edges)
-    assert all(g.places[p].d_p is not None for p in d.new_places)
+    assert all(g.places[p].d_p is None for p in d.new_places if p != g.pix.get(W.seed_data_id))
 
 
 def test_missing_fields_are_drift_not_errors():
@@ -36,7 +36,7 @@ def test_missing_fields_are_drift_not_errors():
     assert p is None and d.drift
     d = ingest_contributor(g, "5", {"reviews": [{"rating": 5, "place_info": {"data_id": "0x1:0x2"}}, {"rating": 4}]},
                            NOW, "")
-    assert d.skipped == 1 and "place_info.reviews" in d.drift
+    assert d.skipped == 1 and not d.drift
 
 
 def test_merge_rule():
@@ -48,3 +48,42 @@ def test_merge_rule():
     assert g.add_edge(Edge(u, p, 5, 30, 30, True)) == "upgraded"
     assert g.add_edge(Edge(u, p, 5, 40, 40, True)) is None
     assert g.edges[(u, p)].t_lo == 30
+
+
+# ---------- real SerpApi shapes (tests/fixtures/serpapi, minimised; DECISIONS C) ----------
+def _fx(name):
+    import json
+    from pathlib import Path
+    return json.loads((Path(__file__).parent / "fixtures/serpapi" / f"{name}.json").read_text())
+
+
+def test_real_place_type_list_and_counts():
+    g = Graph()
+    p, d = ingest_place(g, _fx("maps_place"))
+    P = g.places[p]
+    assert isinstance(P.type, str) and P.d_p and P.lat and not d.drift
+
+
+def test_real_reviews_pages():
+    g = Graph()
+    for name in ("reviews_page1", "reviews_page2"):
+        resp = _fx(name)
+        did = "0x1:0x1"
+        d = ingest_place_reviews(g, did, resp, 1_791_000_000.0, "h" * 64)
+        assert d.users and all(g.edges[k].exact for k in d.edges)
+        assert all(g.users[u].k_u is not None for u in d.users)
+    assert len(_fx("reviews_page1")["reviews"]) == 8 and len(_fx("reviews_page2")["reviews"]) == 20  # C5
+
+
+def test_real_contributor_has_no_d_p():
+    g = Graph()
+    d = ingest_contributor(g, "1", _fx("contributor"), 1_791_000_000.0, "h" * 64)
+    assert d.edges and not d.drift
+    assert all(g.places[p].d_p is None for p in d.places)  # DECISIONS C3
+    assert all(not g.edges[k].exact and g.edges[k].t_lo > 0 for k in d.edges)
+
+
+def test_real_search_results():
+    from nakshatra.graph.ingest import ingest_search
+    base = ingest_search(_fx("maps_search"))
+    assert len(base) == 20 and all(b.get("reviews") is not None for b in base)

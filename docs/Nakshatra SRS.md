@@ -247,6 +247,7 @@ Each algorithm is specified by its inputs, outputs, method and invariants. Tests
   - "a/N year(s) ago" → (T − (N+0.5)·365d, T − N·365d).
   - "Edited …" prefixes are stripped before parsing.
 - **Invariant I1:** for a review carrying both an ISO date and a relative date, the ISO date lies within the relative interval.
+- **Revision (Oct 5, DECISIONS C6):** real SerpApi data shows that Google floors to whole units with calendar months and years. The implemented rule is "N units ago" → age ∈ [N, N+1) units (month = 30.44 d and year = 365.25 d, each ±1.5 d), which replaces the ±0.5 rules above.
 
 ### 5.2 Reviewer prior
 
@@ -486,6 +487,6 @@ Verification methods: **T** = automated test, **D** = demonstration on video, **
 
 ## Appendix C. Open issues
 
-- **OI-1.** Confirm that `place_info` in Contributor Reviews includes a review count. If not, SRS-CR-6 backfill costs rise and the budget split may need retuning.
+- **OI-1.** *Resolved Oct 5:* it does not. d_p for contributor-discovered places comes from hot-place refinement, with the best ring's places first (DECISIONS C3).
 - **OI-2.** Measure how often `user.contributor_id` is missing for non-Google sources in Maps Reviews (for example Trip.com). Those reviews are excluded from expansion.
 - **OI-3.** Decide whether MinHash similarity should feed the ring score (currently report-only).

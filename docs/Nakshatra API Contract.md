@@ -672,7 +672,7 @@ Nakshatra depends on exactly three SerpApi engines. The fields it relies on are 
 
 | Params | Fields relied on | Notes |
 | --- | --- | --- |
-| `contributor_id`, `num=200` | `contributor.level`, `points`, `local_guide`, `contributions.reviews`; `reviews[].review_id`, `rating`, `date` (relative string), `snippet`, `place_info.data_id`, `title`, `type`, `gps_coordinates`; `place_info.reviews` (verify, SRS OI-1) | Capped at 200 results per contributor. Dates are relative only ([docs](https://serpapi.com/google-maps-contributor-reviews-api)) |
+| `contributor_id`, `num=200` | `contributor.level`, `points`, `local_guide`, `contributions.reviews`; `reviews[].review_id`, `rating`, `date` (relative string), `snippet`, `place_info.data_id`, `title`, `type`, `gps_coordinates`; `place_info.reviews` is **absent** (verified Oct 5; d_p comes from refinement, DECISIONS C3) | Capped at 200 results per contributor. Dates are relative only ([docs](https://serpapi.com/google-maps-contributor-reviews-api)) |
 
 ### 8.4 Behaviour Nakshatra assumes
 

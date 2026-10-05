@@ -40,12 +40,17 @@ class Expander:
                     cnt[p] = cnt.get(p, 0) + 1
         return {p: n for p, n in cnt.items() if n >= 2}
 
-    def next_refine(self, seed: int) -> int | None:
-        """The unrefined hot place maximising (expanded reviewers) / log(d_p + 5); ties by index."""
+    def next_refine(self, seed: int, prefer: list[int] | None = None) -> int | None:
+        """Next place to refine. First the current best ring's places whose d_p is unknown (refinement is the d_p
+        backfill, DECISIONS C3), most-shared first; otherwise the hot place maximising n / log(d_p + 5) (ALG §4.2)."""
         hot = {p: n for p, n in self.hot_places(seed).items() if p not in self.refined}
-        if not hot:
+        ring = [p for p in (prefer or []) if p in hot and self.g.places[p].d_p is None]
+        if ring:
+            best = min(ring, key=lambda p: (-hot[p], p))
+        elif hot:
+            best = max(sorted(hot), key=lambda p: hot[p] / math.log((self.g.places[p].d_p or 50) + 5))
+        else:
             return None
-        best = max(sorted(hot), key=lambda p: hot[p] / math.log((self.g.places[p].d_p or 50) + 5))
         self.refined.add(best)
         return best
 

@@ -21,7 +21,7 @@ Abbreviations: PRD, SRS, ARCH (System Architecture), LLD (Technical Design), API
 | A11 | SSE phase names (`seed`, `sample`, `expand`, …) **vs** the State enum (`resolving`, `sampling`, …) | SRS §3.3 vs API §1, §7 | **API State enum** | API owns SSE |
 | A12 | Result JSON shape: DM §6.3 (top-level `run_id`, `state`, `credits`, `explanations[]`) **vs** API `Result` (per-ring `explanation`, `stream_members`, `no_coordination_message`) **vs** SRS/PRD (ring places as strings) | DM, API, SRS, PRD | Store the **union** of DM and API fields in `results.result_json`; ring places are objects `{data_id, title, d_p}` | Both sets are additive; DM and API outrank SRS/PRD |
 | A13 | Package name `lockstep/` in LLD §6.4 onwards **vs** `nakshatra/` | LLD | `nakshatra/` | Leftover from an old name |
-| A14 | Relative-date intervals: LLD writes weeks/months as `max(n − 0.5, 0)`; SRS writes (N − 0.5) | LLD §5.1 vs SRS §5.1 | SRS formulas, with the upper bound clamped to T (so t_hi ≤ T, as SRS also requires) | Clamping only matters for "0 weeks ago", which never appears |
+| A14 | *(Superseded by C6.)* Relative-date intervals: LLD writes weeks/months as `max(n − 0.5, 0)`; SRS writes (N − 0.5) | LLD §5.1 vs SRS §5.1 | SRS formulas, with the upper bound clamped to T (so t_hi ≤ T, as SRS also requires) | Clamping only matters for "0 weeks ago", which never appears |
 | A15 | Plateau rule when no ring has been found yet (best density 0): LLD's `old > 0` check never stops, so a clean place spends the whole budget | LLD §6.2 vs SRS-CR-8 ("improves by less than 2%") | Stop when `best ≤ old · (1 + ε)` over the window, **including 0 → 0** | Precedence rule 4 (credit safety). ALG §4.2: "a plateau means … there is no ring to find" |
 | A16 | Error codes used in code but missing from the catalogue (`E_BUDGET_EXHAUSTED`) | LLD §4.2 vs API §6 | Internal only. The orchestrator catches it and ends the phase. It never reaches the API | Keeps the catalogue closed |
 | A17 | No separate Evaluation Plan or Demo Plan document | — | Evaluation = ALG §10 + PRD §10 + SRS-NF-7..10. Demo = UF §8 + MVP §6–7 | — |
@@ -48,16 +48,19 @@ Abbreviations: PRD, SRS, ARCH (System Architecture), LLD (Technical Design), API
 | D3 | Python 3.13 pinned locally (`.python-version`); `requires-python >= 3.11` unchanged | The machine has 3.13 and 3.14; 3.11 is not installed |
 | D4 | Extra result fields: `rings[].pair_pval`, `verdict`, `rating.set_aside`, `coverage.non_google_skipped` | Additive (API §9.1). They carry UF's verdict line, B5 coverage and A2 |
 | D5 | `tests/synth_world.py`: a deterministic fake SerpApi (a city with a planted ring) stands in for T08's real fixtures | No key yet (ground rule 3). It is clearly labelled as fixture data and is replaced by real cached responses once T02 runs |
+| D7 | The integrity check's D8 query excludes the sentinel run `r_0000000000` (state `done`, no result) | API §5.4 defines that sentinel; DM §5.3 did not account for it |
 | D6 | Partial results for `failed` / `cancelled` runs are not stored yet; `partial` is always null | S5 (cancel) is Should. DM D8 forbids a `results` row for those runs, so this needs a decision on where partial results live |
 
-## C. SerpApi field shapes (PLAN T02, still to be checked live)
+## C. SerpApi field shapes (PLAN T02, checked live on Oct 5 2026)
 
-No API key is present yet. Following ground rule 3, the client is built against fixtures that follow the documented field shapes. These items stay **unverified** until T02 runs in the playground:
+Six live calls (ledgered under the sentinel run `r_0000000000`). Minimised copies are in `tests/fixtures/serpapi/`: review text, addresses, phone numbers and websites removed; contributor IDs replaced with fakes.
 
-| # | Item | Current assumption | If wrong |
+| # | Item | Finding | Resolution |
 | --- | --- | --- | --- |
-| C1 | `google_maps` place lookup by `data_id` | `type=place`, `data=!4m5!3m4!1s<data_id>!8m2!3d0!4d0` (LLD §4.3) | Switch to `place_id`. A one-line change in `engines.py` |
-| C2 | `json_restrictor` syntax | **Off by default** (`serp.json_restrictor: false`). Instead, personal fields (user/contributor `name`, `link`, `thumbnail`, review `images`) are removed from the response before it is cached | DM §8 requires that names and photos are never stored. Removing them ourselves meets that whether or not the restrictor works. Turn the restrictor on once its syntax is confirmed |
-| C3 | `place_info.reviews` present in contributor reviews (SRS OI-1) | Read if present. Otherwise d_p is unknown, and the column weight uses d_p = 50 (DM §7). Backfill (CR-6) is P1 | Popularity weights get weaker; the backfill is the planned fix |
-| C4 | Contributor `num=200`, 200-review cap | As documented | Pagination needed |
-| C5 | Reviews first page = 8 results, no `num`; later pages `num=20` | As documented | — |
+| C1 | `google_maps` place lookup by `data_id` | **Works**: `type=place`, `data=!4m5!3m4!1s<data_id>!8m2!3d0!4d0` returns the same `data_id`. `place_results.type` is a **list** (`["Fertility clinic"]`); `local_results[].type` and `place_info.type` are strings | Take the first element when `type` is a list |
+| C2 | `json_restrictor` syntax | Not tested (it would cost a credit per variant) | Still off. Personal fields are scrubbed before caching instead (names, links, thumbnails, images). `place_results.user_reviews` (review text) is still cached; it is dropped from fixtures, and `demo.db` export must drop it too |
+| C3 | `place_info.reviews` in contributor reviews (SRS OI-1) | **Absent.** `place_info` has only `title, address, gps_coordinates, type, data_id` | **Refinement doubles as the d_p backfill.** A `google_maps_reviews` page-1 call returns `place_info.reviews`, plus exact dates and co-reviewers, for the same 1 credit as a place lookup. Refinement prefers the current best ring's places with unknown d_p, and leftover credits after the plateau go to those places. Other places keep d_p = 50 (DM §7) for weights and H. This keeps the "global popularity" claim true for ring places, where it matters. Places are not looked up across runs, because that would break replay |
+| C4 | Contributor `num=200`, 200-review cap | `num=200` is accepted. A contributor whose profile said 8 reviews returned 14 (ratings included); no pagination | k_u = max(profile count, observed degree) (already the rule). The cap is still unobserved |
+| C5 | Reviews first page = 8, later pages = 20 | **Confirmed**: page 1 returned 8, page 2 (`next_page_token`, `num=20`) returned 20. Every review carries both `date` and `iso_date` | — |
+| C6 | Relative date semantics | **Google floors to whole units, with calendar months and years.** On 36 real (label, age) pairs: 27.7 d → "3 weeks", 85.6 d → "2 months", 212.8 d → "6 months", 726.9 d → "a year". SRS §5.1's ±0.5 rule fails on these | Parser: "N units ago" → age ∈ [N, N+1) units; month = 30.44 d and year = 365.25 d, each ±1.5 d calendar slack. I1 is tested on the real pairs (`date_pairs.json`). **Supersedes SRS §5.1 and A14.** A month-dated edge is ~33 d wide, so lockstep relies on refined (exact) edges, as ALG §7.1 intends |
+| C7 | Local Guide flag | All 8 reviewers on one real page were Local Guides, including 1–7-review accounts | The prior's Local Guide term carries little signal here. Revisit when fitting the weights (T31) |

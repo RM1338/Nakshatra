@@ -1,0 +1,54 @@
+{
+ "search_metadata": {
+  "status": "Success"
+ },
+ "place_results": {
+  "title": "Vasantha Fertlity Care | Best IVF Centre in Coimbatore",
+  "place_id": "ChIJF0YAzuJYqDsRlq43jYeLgr8",
+  "data_id": "0x3ba858e2ce004617:0xbf828b878d37ae96",
+  "data_cid": "13799745622522703510",
+  "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba858e2ce004617%3A0xbf828b878d37ae96&engine=google_maps_reviews&hl=en",
+  "photos_link": "https://serpapi.com/search.json?data_id=0x3ba858e2ce004617%3A0xbf828b878d37ae96&engine=google_maps_photos&hl=en",
+  "gps_coordinates": {
+   "latitude": 11.018823399999999,
+   "longitude": 76.9778494
+  },
+  "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJF0YAzuJYqDsRlq43jYeLgr8",
+  "provider_id": "/g/11fn04v9gv",
+  "serpapi_thumbnail": "https://serpapi.com/images/url/2C9MGXicHcRLjoIwAADQE1WoYwiauHCqVaRqDGP5bAxWoJbSIi04ntAzeBsT3-K9X9za1swcR_KfUaV1JYveFB3TyhbKjphunKrLjQHMOIvFb92Qkqyi564e0jLOtkgSgkBKyiGWz376p5LheIIXekPRnXvZcEBC2v0932Jf54zvgjZFfi-XZgmhGIfJmU8pUL7AQaxR6wlJ43Az7q_B7YT3m65gdnLMkkj-N5Xx4DrMaZ1hIiieP6DruoB_Z0B9AM96RWk",
+  "rating_summary": [
+   {
+    "stars": 1,
+    "amount": 1
+   },
+   {
+    "stars": 2,
+    "amount": 0
+   },
+   {
+    "stars": 3,
+    "amount": 2
+   },
+   {
+    "stars": 4,
+    "amount": 2
+   },
+   {
+    "stars": 5,
+    "amount": 79
+   }
+  ],
+  "rating": 4.9,
+  "reviews": 84,
+  "type": [
+   "Fertility clinic"
+  ],
+  "type_ids": [
+   "fertility_clinic"
+  ],
+  "country": "India",
+  "open_state": "Open 24 hours",
+  "plus_code": "2X9H+G4 Coimbatore, Tamil Nadu, India",
+  "serpapi_posts_link": "https://serpapi.com/search.json?data_id=0x3ba858e2ce004617%3A0xbf828b878d37ae96&engine=google_maps_posts"
+ }
+}

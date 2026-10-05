@@ -28,6 +28,13 @@ def _int(x) -> int | None:
         return None
 
 
+def _str(x) -> str | None:
+    """place_results.type is a list on real SerpApi (['Fertility clinic']); local_results and place_info use str."""
+    if isinstance(x, list):
+        x = x[0] if x else None
+    return str(x) if x else None
+
+
 def _touch_place(g: Graph, d: Delta, data_id: str) -> int:
     new = data_id not in g.pix
     p = g.place(data_id)
@@ -54,7 +61,7 @@ def apply_place(g: Graph, d: Delta, info: dict) -> int | None:
     p = _touch_place(g, d, did)
     pl = g.places[p]
     pl.title = info.get("title") or pl.title
-    pl.type = info.get("type") or pl.type
+    pl.type = _str(info.get("type")) or pl.type
     pl.place_id = info.get("place_id") or pl.place_id
     gps = info.get("gps_coordinates") or {}
     pl.lat = gps.get("latitude", pl.lat)
@@ -113,20 +120,16 @@ def ingest_contributor(g: Graph, cid: str, resp: dict, T: float, source_hash: st
     reviews = resp.get("reviews") or []
     U.expanded = True
     U.truncated = U.truncated or len(reviews) >= CONTRIB_CAP
-    missing_dp = 0
     for r in reviews:
         pi = r.get("place_info") or {}
         if r.get("rating") is None or not pi.get("data_id"):
             d.skipped += 1
             continue
-        p = apply_place(g, d, pi)
-        missing_dp += pi.get("reviews") is None
+        p = apply_place(g, d, pi)  # place_info carries no review count (DECISIONS C3); d_p comes from refinement
         lo, hi, exact = parse_interval(r.get("date"), T)
         if g.add_edge(Edge(u, p, float(r["rating"]), lo, hi, exact, r.get("review_id"),
                            (r.get("snippet") or "")[:280], source_hash)):
             d.edges.append((u, p))
-    if missing_dp:
-        d.drift.append("place_info.reviews")
     return d
 
 

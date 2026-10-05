@@ -1,0 +1,721 @@
+{
+ "search_metadata": {
+  "status": "Success"
+ },
+ "search_information": {
+  "local_results_state": "Results for exact spelling",
+  "query_displayed": "fertility clinic"
+ },
+ "local_results": [
+  {
+   "position": 1,
+   "title": "Iswarya IVF & Fertility Centre Coimbatore",
+   "place_id": "ChIJy4SrU01YqDsRpAaaWECawrQ",
+   "data_id": "0x3ba8584d53ab84cb:0xb4c29a40589a06a4",
+   "data_cid": "13025142673463969444",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba8584d53ab84cb%3A0xb4c29a40589a06a4&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba8584d53ab84cb%3A0xb4c29a40589a06a4&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.0173946,
+    "longitude": 76.9772818
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJy4SrU01YqDsRpAaaWECawrQ",
+   "provider_id": "/g/11c6czqcvx",
+   "rating": 4.8,
+   "reviews": 1340,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Fertility physician",
+    "Obstetrician-gynecologist",
+    "Women's health clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic",
+    "fertility_physician",
+    "gynecologist",
+    "obstetrics_gynecology_clinic"
+   ],
+   "country": "India",
+   "open_state": "Open 24 hours",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/TlyU-3icHcTRboIwFADQL6oU2Aaa-NABATdQ2ZYJTwt2Xa8BoXJbi_6hn-DfLPE8nPsNtFa4cJwO_JkcBtkJg2LkQ69Fr2d8ODpybBAJR4dFZ9UdC42ok7CAF9omcMh9WjCTet60a9MkZ-ocrD54m_lhKUr3J9781tR-Z2_la_uc6S_bbGtoYM-set_Hgpjo6aRMge5aijwIYRqvXjp1FlUI0R_CZ0Cm-bVR1aqS811dHer4cjkFhrGldSmlBB5z0v8DIahGMA"
+  },
+  {
+   "position": 2,
+   "title": "Nova IVF Fertility Center - Best IVF Centre in Coimbatore",
+   "place_id": "ChIJzfy8vTFYqDsR5NAe7SUrBWY",
+   "data_id": "0x3ba85831bdbcfccd:0x66052b25ed1ed0e4",
+   "data_cid": "7351329408644206820",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba85831bdbcfccd%3A0x66052b25ed1ed0e4&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba85831bdbcfccd%3A0x66052b25ed1ed0e4&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.0224339,
+    "longitude": 76.9969321
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJzfy8vTFYqDsR5NAe7SUrBWY",
+   "provider_id": "/g/11c4b394j1",
+   "rating": 4.8,
+   "reviews": 2030,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Fertility physician",
+    "Obstetrician-gynecologist",
+    "Women's health clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic",
+    "fertility_physician",
+    "gynecologist",
+    "obstetrics_gynecology_clinic"
+   ],
+   "country": "India",
+   "open_state": "Opens soon \u00b7 8\u202fAM",
+   "service_options": {
+    "onsite_services": true
+   },
+   "serpapi_thumbnail": "https://serpapi.com/images/url/ETYennicHcTdboIwGADQJ6q0DENZ4kWFRDFuoNM18abBT2zLX1mL4HzBPYNvY7JzcZ5_ahh69-55jXqbSWNkU95cacF0Q9kNMzCtJ23hHALnsXjsmzbfTyOvO6PzJZRk_RG0ohVbll4ysenvwZzWdo7VdR_xowSbJ_IXf7uIUsh8fSdharNIp0QB8vuKsfhc1cFJZ6ufr6AqBCSFo-H1tFseNsieeVyPU_JYcT6xG03E5_rhh4fLlujFRDDGSP0PqHsBl-NEeA"
+  },
+  {
+   "position": 3,
+   "title": "Womens Center by Motherhood Fertility & IVF \u2013 Best IVF Centre in Coimbatore | IUI, ICSI, Infertility Treatment",
+   "place_id": "ChIJ1wTw6f_xqDsR5x7mrDvrVwQ",
+   "data_id": "0x3ba8f1ffe9f004d7:0x457eb3bace61ee7",
+   "data_cid": "312977340661898983",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba8f1ffe9f004d7%3A0x457eb3bace61ee7&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba8f1ffe9f004d7%3A0x457eb3bace61ee7&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.0337803,
+    "longitude": 76.9517195
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJ1wTw6f_xqDsR5x7mrDvrVwQ",
+   "provider_id": "/g/11sn7k9j9s",
+   "rating": 4.8,
+   "reviews": 187,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Doctor",
+    "Pregnancy care center",
+    "Obstetrician-gynecologist",
+    "Health consultant",
+    "Hospital",
+    "Women's health clinic",
+    "Reproductive health clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic",
+    "doctor",
+    "pregnancy_care_center",
+    "gynecologist",
+    "health_consultant",
+    "hospital",
+    "obstetrics_gynecology_clinic",
+    "reproductive_health_clinic"
+   ],
+   "country": "India",
+   "open_state": "Open 24 hours",
+   "unsupported_extensions": [
+    {
+     "service_options": [
+      "Onsite services"
+     ]
+    },
+    {
+     "accessibility": [
+      "Assistive hearing loop",
+      "Wheelchair accessible restroom"
+     ]
+    }
+   ],
+   "service_options": {
+    "onsite_services": false
+   },
+   "serpapi_thumbnail": "https://serpapi.com/images/url/XApXBXicHcTbToMwGADgJ-oojMk08WJ07ICCMrJVdkOwFMhW2qZ_OcSH3L1vY-J38f0-Oms1vDiO6JaLVqlW8AG4YUpaLu2Cqd5pTQWAGDgbMmrRJ3mTSFxX-RhH7GMXTtabDzT0TvB1K5DRc--zt3ciziVhUxepBEf0eGRQ0XidclGPtkHuZ2zmcOU3qdySbLkCekutGeKcfuf784_mAQ3deaizJ29X4st1nEpd3IND2we-Ty7PPOP1GheQvE4uxhh1_zMk_wDC3UdW"
+  },
+  {
+   "position": 4,
+   "title": "Vamsam Hospital & Fertility Centre - Coimbatore | Best IVF Centre in Coimbatore",
+   "place_id": "ChIJbZaI0INZqDsRm0-ESEuEaus",
+   "data_id": "0x3ba85983d088966d:0xeb6a844b48844f9b",
+   "data_cid": "16963516405318438811",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba85983d088966d%3A0xeb6a844b48844f9b&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba85983d088966d%3A0xeb6a844b48844f9b&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.044092599999999,
+    "longitude": 76.9856827
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJbZaI0INZqDsRm0-ESEuEaus",
+   "provider_id": "/g/11fkw7tfvs",
+   "rating": 4.8,
+   "reviews": 431,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Hospital"
+   ],
+   "country": "India",
+   "open_state": "Open 24 hours",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/fqIlQ3icHcRJDoIwAADAFyGVuoCJB6JRiEsFIgFvWEurdAFbEPmgb_A3Js5hvh9mTK0Xts0ZHFGlKCetJk-spCHSjLASNn0WWltY2_6qq7k4eAwFm6mKnXdl-nrft-h-LNc1fWhUKZ4bLKbwLc_ARYOEYNykXRJtmjYuURMR2M_5IMpAWOpx6_aH3A2ukbO7QQcckyzz_eKezeKUVp4T9lu6Wr8qFRa7xM1yHp4G3XgXErPZZPkaAwAs9h9b8gcuU0Xl"
+  },
+  {
+   "position": 5,
+   "title": "Vasantha Fertlity Care | Best IVF Centre in Coimbatore",
+   "place_id": "ChIJF0YAzuJYqDsRlq43jYeLgr8",
+   "data_id": "0x3ba858e2ce004617:0xbf828b878d37ae96",
+   "data_cid": "13799745622522703510",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba858e2ce004617%3A0xbf828b878d37ae96&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba858e2ce004617%3A0xbf828b878d37ae96&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.018823399999999,
+    "longitude": 76.9778494
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJF0YAzuJYqDsRlq43jYeLgr8",
+   "provider_id": "/g/11fn04v9gv",
+   "rating": 4.9,
+   "reviews": 84,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic"
+   ],
+   "country": "India",
+   "open_state": "Open 24 hours",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/NG6HFXicHcRJDoIwAADAF1VaDXFJPMjSgKLWajD1QgBZVGgrLYt-0Df4GxPnMN9PqbVUC8OoysmoEKKoslZlTSq4zrgepaI2iiZWCqTKWNmdrGrSRm7seJez9mMKMIXm0Sc4ku6VvYZwAk2SzbYHTJL8xgQf3wNmDb4TDHzqnL2EXtZUTZ_NA0WszeeAhOK-41XdUgweffi6Ici111NmPQurA2UXv00kqX1i2MnNPQk4QJujHC97BCEE5f8U8B-IwUSr"
+  },
+  {
+   "position": 6,
+   "title": "IVF Access",
+   "place_id": "ChIJs6mb6PxZqDsRJa_4VQ9HxtM",
+   "data_id": "0x3ba859fce89ba9b3:0xd3c6470f55f8af25",
+   "data_cid": "15259962518583947045",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba859fce89ba9b3%3A0xd3c6470f55f8af25&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba859fce89ba9b3%3A0xd3c6470f55f8af25&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.0231014,
+    "longitude": 77.0019817
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJs6mb6PxZqDsRJa_4VQ9HxtM",
+   "provider_id": "/g/11rcsvjnj9",
+   "rating": 4.9,
+   "reviews": 1165,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic"
+   ],
+   "country": "India",
+   "open_state": "Closed \u00b7 Opens 9\u202fAM",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/s7kUY3icHcRdDoIgAADgE5moWa6tB7V_N3PaKn1pSQgFggFJdcOO0G3a-h6-74do3amJbTPiDbAQmKGHQhIKrhHXAyhaG8uzUhZUdhj3HWszDar5a1dfXRIu5KEw6WOe1MM6PQTZW4JLF9_5Xq3uYd5nlWEVi1wKh04j8hzQyhudCLkeF67vr0cUgaaIuOyTKE11kVxm0Uz1e5C9UAOJE5R-QJebZ2thU55o-cxvwdaMG771wgRPjQMAsMh_aPEfWydF6A"
+  },
+  {
+   "position": 7,
+   "title": "Sudha Women, Child care and Fertility Centre | Best IVF & fertility Centre in Coimbatore",
+   "place_id": "ChIJW7p_g1JYqDsRvOj7oo09NXA",
+   "data_id": "0x3ba85852837fba5b:0x70353d8da2fbe8bc",
+   "data_cid": "8085436384547694780",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba85852837fba5b%3A0x70353d8da2fbe8bc&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba85852837fba5b%3A0x70353d8da2fbe8bc&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.016772099999999,
+    "longitude": 76.9754394
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJW7p_g1JYqDsRvOj7oo09NXA",
+   "provider_id": "/g/11fy_dmbpp",
+   "rating": 4.7,
+   "reviews": 699,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Fertility physician",
+    "Hospital",
+    "Neonatal physician",
+    "Pregnancy care center"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic",
+    "fertility_physician",
+    "hospital",
+    "neonatal_physician",
+    "pregnancy_care_center"
+   ],
+   "country": "India",
+   "open_state": "Open 24 hours",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/HO20XXicHcRJDoIwAADAFyEFZDPxgCySoHWJKzfalFKhgLRSwwP9g78xcQ7z_VRS9mKh601lzWjX0Ya8BBlw10rSyhnuuE6HQggNCz0Ix77h2wly6sZvUXglmtslQunlAK7UyRhTNjhY6YblzvF2371S7EAZiD1VA3oq5wTXgD-8nYsiz7eiLTDDzJuiCK6DVvW8Mlz4KEx281k9Xp8kkWc4hCBcpQRNRn428vFUv_0pqWO8VAYAQKv-Y639ARcTQ-g"
+  },
+  {
+   "position": 8,
+   "title": "Genesis IVF Advanced Fertility Clinic- Best IVF centre in Coimbatore | Fertility specialist | Infertility treatment",
+   "place_id": "ChIJd6kVzOJYqDsRRftqZnBP8cA",
+   "data_id": "0x3ba858e2cc15a977:0xc0f14f70666afb45",
+   "data_cid": "13902980868842650437",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba858e2cc15a977%3A0xc0f14f70666afb45&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba858e2cc15a977%3A0xc0f14f70666afb45&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.0151551,
+    "longitude": 76.95243339999999
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJd6kVzOJYqDsRRftqZnBP8cA",
+   "provider_id": "/g/11smqnf7zx",
+   "rating": 4.9,
+   "reviews": 101,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Maternity hospital",
+    "Women's health clinic",
+    "Pregnancy care center",
+    "Reproductive health clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic",
+    "maternity_hospital",
+    "obstetrics_gynecology_clinic",
+    "pregnancy_care_center",
+    "reproductive_health_clinic"
+   ],
+   "country": "India",
+   "open_state": "Open 24 hours",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/SlRI3XicHcRJDoIwAADAFyEoi2LiQYyigoILkHoxWCvFlpa0LNUf-gR_Y-Ic5vvBTVPLqa5TbA4KzguKWokE5KxBrBlAXumFyKXUoNTni66m1T6QkUMc9wit3AXPWpjeS4xVGVwISOgypsT1t1EyOUA7aXG4OeP745Z0h8wfry7qdI_sdcZJydPYslplr-FoE05GHIT5lgRYpQIFnsfeqZo_bqGz6nO7VJEJfItVZbGjbQ-uVwRwP-uHhmFo-D_U2A9PUEah"
+  },
+  {
+   "position": 9,
+   "title": "Dr ARAVIND\u2019S IVF GANPATHY- FERTILITY & PREGNANCY CENTRE",
+   "place_id": "ChIJi1oaV933qDsRNrsDJZYR04I",
+   "data_id": "0x3ba8f7dd571a5a8b:0x82d311962503bb36",
+   "data_cid": "9426897781580348214",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba8f7dd571a5a8b%3A0x82d311962503bb36&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba8f7dd571a5a8b%3A0x82d311962503bb36&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.0465153,
+    "longitude": 76.9868671
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJi1oaV933qDsRNrsDJZYR04I",
+   "provider_id": "/g/11rxxj5n2t",
+   "rating": 4.8,
+   "reviews": 622,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Emergency care service",
+    "Obstetrician-gynecologist",
+    "Maternity hospital",
+    "Women's health clinic",
+    "Reproductive health clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic",
+    "emergency_care_service",
+    "gynecologist",
+    "maternity_hospital",
+    "obstetrics_gynecology_clinic",
+    "reproductive_health_clinic"
+   ],
+   "country": "India",
+   "open_state": "Closed \u00b7 Opens 9\u202fAM",
+   "service_options": {
+    "onsite_services": true
+   },
+   "serpapi_thumbnail": "https://serpapi.com/images/url/s7myVnicHcTdCoIwGADQJ1rONMygC0UzsvUzI1c3Ul_D4aaWm4i9YY_Q2wSdi_P9CGOeemFZSjiTsm1LxXvNO2gbwxszgba2yu6mNQJtBUEo6y34d1cRsvMqieKy798zjBihNKgzJB-nOaTV6tVVQknKC1YkAJF7214lI9PsND5tYHt777v5OfHNmEyzgqWbVGF3NVQk1kqfX8SbRSG6OptQk5EGF5xH8fyYXyh3UDgcbOYIbz0sBxtjjMR_QM0PmEtDYg"
+  },
+  {
+   "position": 10,
+   "title": "Meya Pluro Fertility & IVF",
+   "place_id": "ChIJoynuzfJZqDsRABtu_fcnHwk",
+   "data_id": "0x3ba859f2cdee29a3:0x91f27f7fd6e1b00",
+   "data_cid": "657288016681638656",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba859f2cdee29a3%3A0x91f27f7fd6e1b00&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba859f2cdee29a3%3A0x91f27f7fd6e1b00&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.0259795,
+    "longitude": 76.9453565
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJoynuzfJZqDsRABtu_fcnHwk",
+   "provider_id": "/g/11pdvvp6cm",
+   "rating": 4.9,
+   "reviews": 117,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Fertility physician",
+    "Obstetrician-gynecologist",
+    "Health consultant",
+    "Maternity hospital",
+    "Women's health clinic",
+    "Pregnancy care center",
+    "Wellness center"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic",
+    "fertility_physician",
+    "gynecologist",
+    "health_consultant",
+    "maternity_hospital",
+    "obstetrics_gynecology_clinic",
+    "pregnancy_care_center",
+    "wellness_center"
+   ],
+   "country": "India",
+   "open_state": "Closed \u00b7 Opens 9\u202fAM",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/2RUvJHicHcxLUoMwGADgE6XAAFqd6YLaUjpaGwkw2I3TxBAYyAN-XnJDj-Bt2nHzLb-_37LvDTxbVlO6K6G1aPgAvGNa9Vz1K6alJborAGJgBS-jaSR2U_ucocPiJWPhw89sUnmpW4es6XIKEfKz4cn7aN08FpQc6PdMYV7MbsJKBV2F74kPVTWe9KN5ZeRtfZHX0Kg6iSl5mIpcJ16Mdyln0fazZfU7jlrp1HxPonx_FEU2hLB8bckx2EyObduo_JchdQOS7Ub8"
+  },
+  {
+   "position": 11,
+   "title": "Iswarya Fertility Centre Singanallur",
+   "place_id": "ChIJ1zJZk1ZXqDsRyRe69BuS5KQ",
+   "data_id": "0x3ba85756935932d7:0xa4e4921bf4ba17c9",
+   "data_cid": "11881782365677819849",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba85756935932d7%3A0xa4e4921bf4ba17c9&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba85756935932d7%3A0xa4e4921bf4ba17c9&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.001307299999999,
+    "longitude": 77.0319559
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJ1zJZk1ZXqDsRyRe69BuS5KQ",
+   "provider_id": "/g/11vk10g8vz",
+   "rating": 4.9,
+   "reviews": 432,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Fertility physician",
+    "Obstetrician-gynecologist",
+    "Women's health clinic",
+    "Pregnancy care center"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic",
+    "fertility_physician",
+    "gynecologist",
+    "obstetrics_gynecology_clinic",
+    "pregnancy_care_center"
+   ],
+   "country": "India",
+   "open_state": "Closed \u00b7 Opens 9\u202fAM",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/Y4rsanicHcTbCoIwAADQLzI3DXRBD2mlrRQVKu1FbMq8bM45pcsf9gn9TdB5ON9PPU2DWuk6q80FFYKyalbVSEQ_Vf20IILrdCyU0ojSNxun4ycCz22g4Owqo_MYCgPL43kcZejSZTlMqxAbrye2VDnLl3WTvngXmJxsggZ7pk4TSR48Dg4OIwsdeXPMqSG3rCRxU44OXpouRECkErJ74vlgfzBZ6-7YNeAZ9LfJoCXtOzubsInXDwgA0Or_ROt_7Z9EjA"
+  },
+  {
+   "position": 12,
+   "title": "Dr.Geetha's Fertility Clinic",
+   "place_id": "ChIJLR1bNNFfqDsR0QDMY5JTmvU",
+   "data_id": "0x3ba85fd1345b1d2d:0xf59a539263cc00d1",
+   "data_cid": "17697549573910429905",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba85fd1345b1d2d%3A0xf59a539263cc00d1&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba85fd1345b1d2d%3A0xf59a539263cc00d1&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.0257673,
+    "longitude": 76.8998515
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJLR1bNNFfqDsR0QDMY5JTmvU",
+   "provider_id": "/g/11rrtwff02",
+   "rating": 4.9,
+   "reviews": 74,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic"
+   ],
+   "country": "India",
+   "open_state": "Closed \u00b7 Opens 10\u202fAM",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/z3Nl-nicHcRJDoIwFADQE1UKWBUTFwTHYGQIcWBDSqkgUor8WiM39AjexsS3eN9PpVQHc8NoKntUSlk2_Am8Z7JVvFUjJoVR9hQAMTBcT3eNCOktIVYUWKopIjbUabY5SJ1crmqXVbbLga0JPZaEeLGJksnddrSyAxoicwuvaS-dWCEaLpO9gAfdZNr3jzhfTXeD5cfmOfCiOg-GuAfeFRgyQkOaijrKndvJBS8fa_F-tjDbuouXiTFG1X-G2h8gL0XL"
+  },
+  {
+   "position": 13,
+   "title": "Kreate Fertility and Women\u2019s Centre",
+   "place_id": "ChIJTbev7C7iUQUR3jRW7CC62-k",
+   "data_id": "0x551e22eecafb74d:0xe9dbba20ec5634de",
+   "data_cid": "16851267081303635166",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x551e22eecafb74d%3A0xe9dbba20ec5634de&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x551e22eecafb74d%3A0xe9dbba20ec5634de&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.0271002,
+    "longitude": 77.0187061
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJTbev7C7iUQUR3jRW7CC62-k",
+   "provider_id": "/g/11xl5xx7tv",
+   "rating": 4.8,
+   "reviews": 21,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic"
+   ],
+   "country": "India",
+   "open_state": "Open 24 hours",
+   "book_online": "https://www.eka.care/doctor/dr-janani-ramanesh-infertility-specialist/calendar?rwg_token=AE37R_hvxogH1tfv5s2VnJ3S6rJtRi3aplIMC_vIxAKwmDtEYaSoiSfL1bn3J9emEw_pk_iP9LItjUOfyWv8HdMy987jxcqMMQ%3D%3D",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/qX6-iXicHcTNboIwAADgJ6pUKj8u2QE1TpJ2YjeHeGlKwXauUKSdoC-5s29jsu_wPf6Uc5198Tyt0EQaI3X9a-temNbVrZsI03iy59YCYb1kee10Q4oyowmI-pgWcUsuPmGCSWbrXQjWUQaXlXaIx1Eg56occcjNbvVW7ufF4r69URs0G47w4YelA1S4Itn-moejKPMD8b9EtZEAIyo-gmM3pUk3nL61XH_OcpZiODvfsxUZT-86PXMUuDw6-q_DFEII1P8CtE9lZ0Zj"
+  },
+  {
+   "position": 14,
+   "title": "Nova IVF Fertility Center - Best IVF Centre in Singanallur, Coimbatore",
+   "place_id": "ChIJKyWR369ZqDsRrgKvxPi94Jk",
+   "data_id": "0x3ba859afdf91252b:0x99e0bdf8c4af02ae",
+   "data_cid": "11088071158735504046",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba859afdf91252b%3A0x99e0bdf8c4af02ae&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba859afdf91252b%3A0x99e0bdf8c4af02ae&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.005245,
+    "longitude": 77.02688049999999
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJKyWR369ZqDsRrgKvxPi94Jk",
+   "provider_id": "/g/11lw5qh3rr",
+   "rating": 4.9,
+   "reviews": 95,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Fertility physician",
+    "Obstetrician-gynecologist",
+    "Women's health clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic",
+    "fertility_physician",
+    "gynecologist",
+    "obstetrics_gynecology_clinic"
+   ],
+   "country": "India",
+   "open_state": "Opens soon \u00b7 8\u202fAM",
+   "service_options": {
+    "onsite_services": true
+   },
+   "serpapi_thumbnail": "https://serpapi.com/images/url/cfj3BHicHcRJDoIwFADQEyEIikPiApQqihoUB9hh-ZahUkpLQG7oEbyNiW_xvp9UykrMVZWmxoAwRig0AmrMSgmlHGD2UkkdC6FgoVqWXbw8uNXhmpt74BF2E-4Y8kwBbNcx7vFuvPGcIDtVjCFk7jO_up62VdewPHig5cRXGjrsQ5vrqxz65H3ohXtgceg3xM8s7TnpdASFzIspMtvudvESfeTN9E2QUhxcyRGeEdq1_H6BaEUW7VDTNCX9j5XyB2dvRoY"
+  },
+  {
+   "position": 15,
+   "title": "ARC Fertility Hospitals",
+   "place_id": "ChIJ_1dIcrVZqDsRTTn_ksJt0s8",
+   "data_id": "0x3ba859b5724857ff:0xcfd26dc292ff394d",
+   "data_cid": "14975152393417603405",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba859b5724857ff%3A0xcfd26dc292ff394d&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba859b5724857ff%3A0xcfd26dc292ff394d&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.012513199999999,
+    "longitude": 76.98589009999999
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJ_1dIcrVZqDsRTTn_ksJt0s8",
+   "provider_id": "/g/11c2y4y6nm",
+   "rating": 4.7,
+   "reviews": 1194,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Hospital",
+    "Fertility physician",
+    "Psychologist",
+    "Sexologist",
+    "Surgeon",
+    "Urologist"
+   ],
+   "country": "India",
+   "open_state": "Closed \u00b7 Opens 9\u202fAM",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/Ge0suXicHcTdDoIgGADQJyJhzlZtXaRttWql_Qh104qRYuiHglBP2DP0Nm2di_P9lNZqMwkCVYaDAqBQojei49BY0dgBhzooupsxiJtgljit6rRXkAOD4WHOM7JyaLzxbs2WVRueHqlHVZaTFvLWDB_J4l3TlDG9huzdxf3o5ZDyPpM6ui_3V5SS-KDvoTD7SsyKs3RlHN3G8VGePE2qC9m6I7XsYpIN5dGzVz7HDRURlnI39QRjjMr_HDU_OMRGmg"
+  },
+  {
+   "position": 16,
+   "title": "Ethnic Health Care Coimbatore",
+   "place_id": "ChIJnQ4W1JJZqDsRC9WKD2fDgJs",
+   "data_id": "0x3ba85992d4160e9d:0x9b80c3670f8ad50b",
+   "data_cid": "11205170720307598603",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba85992d4160e9d%3A0x9b80c3670f8ad50b&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba85992d4160e9d%3A0x9b80c3670f8ad50b&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.0219484,
+    "longitude": 76.95061
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJnQ4W1JJZqDsRC9WKD2fDgJs",
+   "provider_id": "/g/11lsl9d9z5",
+   "rating": 4.5,
+   "reviews": 303,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Child health care center",
+    "Fertility physician",
+    "Health consultant",
+    "Herbal medicine store",
+    "Hospital",
+    "Women's health clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic",
+    "child_health_care_centre",
+    "fertility_physician",
+    "health_consultant",
+    "herbal_medicine_store",
+    "hospital",
+    "obstetrics_gynecology_clinic"
+   ],
+   "country": "India",
+   "open_state": "Closed \u00b7 Opens 10\u202fAM",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/MUH7PnicHcTNkoIgAADgJyKpLGtnOpDT7y6Nm1jWxUE0qAhM1KSX7NzbNNN3-N4vUVWF-XEcKfodrjWXeW3ykmlV5arqMH1zeEmNAcw4yG8KecMjAtHfub9dETUEbYatTUN0PKQLHD_RpfWWd3ca1aaH1D2SGbAuSEhUtouYe2BZJ_KMD2NGPSYHhPZ-o1nTFk0zsD4dkyLlxA-yzAuumiXGHn3wgJe5lfwp_sMN5vOhOgm2o-5678Z8F4wmjy6EEIjvDKgP_PpITQ"
+  },
+  {
+   "position": 17,
+   "title": "KOVAI HEALTH CENTER & NATURE CURE FERTILITY CENTER. (Fertility & Sexology)",
+   "place_id": "ChIJQy0pqqhZqDsR2rEoj62HxpU",
+   "data_id": "0x3ba859a8aa292d43:0x95c687ad8f28b1da",
+   "data_cid": "10792462736540873178",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba859a8aa292d43%3A0x95c687ad8f28b1da&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba859a8aa292d43%3A0x95c687ad8f28b1da&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.0156726,
+    "longitude": 76.9679041
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJQy0pqqhZqDsR2rEoj62HxpU",
+   "provider_id": "/g/11g0lbwp52",
+   "rating": 4.8,
+   "reviews": 155,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic",
+    "Sexologist",
+    "Fertility physician",
+    "Obstetrician-gynecologist",
+    "Medical clinic",
+    "Women's health clinic",
+    "STD clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic",
+    "sexologist",
+    "fertility_physician",
+    "gynecologist",
+    "medical_clinic",
+    "obstetrics_gynecology_clinic",
+    "std_clinic"
+   ],
+   "country": "India",
+   "open_state": "Closed \u00b7 Opens 9\u202fAM",
+   "unsupported_extensions": [
+    {
+     "accessibility": [
+      "Assistive hearing loop",
+      "Wheelchair accessible entrance",
+      "Wheelchair accessible seating"
+     ]
+    }
+   ],
+   "service_options": {
+    "onsite_services": true
+   },
+   "book_online": "https://www.justdial.com/online-consult/hospital?action=BA&extRdt=1&wkwebview=1&docid=0422PX422.X422.100820074258.L8U8&rwg_token=AE37R_gtbYnb16NcMZ2vdFDE0u8nK62H6cMT49fqbm0IUSev_bl1dpysBCSebJtnpUf4jeJFuBquWEbTZmKk2HMyEK595JQSeg%3D%3D",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/MKrY0nicHcTBboIwAADQL6rQoGiW7EAVN6jBCbogF9PUUrCFIi3S8ZHe_RuTvcN7PStjOv3hOLLyZlwpLtmgWU9Va1hrZlQ1Du-J1oBqJwiQaHasKz08xfJxsBmej90S8XspcpLdflXjh4T76lIS6CO0SXIRjlcSTeEw-LZOcdX-FeKmbVMAAa2sJUaH7LHUNjnlMYyP23AcVl60_-7XIN2qKIHgcpJfa3QHsjvXCwkCl5p-2rM5_klzTT9H6LouqP6noH0DFwxIJw"
+  },
+  {
+   "position": 18,
+   "title": "Andrology Center - Sperm Analysis & Male Fertility Test Lab",
+   "place_id": "ChIJT5cu4rFZqDsRCxWUivRBHw4",
+   "data_id": "0x3ba859b1e22e974f:0xe1f41f48a94150b",
+   "data_cid": "1017604559361807627",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba859b1e22e974f%3A0xe1f41f48a94150b&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba859b1e22e974f%3A0xe1f41f48a94150b&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.007915299999999,
+    "longitude": 76.975987
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJT5cu4rFZqDsRCxWUivRBHw4",
+   "provider_id": "/g/1q6j8f16h",
+   "rating": 4.9,
+   "reviews": 20,
+   "type": "Diagnostic center",
+   "types": [
+    "Diagnostic center",
+    "Blood testing service",
+    "Laboratory",
+    "Medical laboratory"
+   ],
+   "country": "India",
+   "open_state": "Closed \u00b7 Opens 9:30\u202fAM",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/cT-3wnicHctLjoIwAADQEyEVdRATF4DWX4oTtFHcGCidFoS2aYuMXtK1t3Eym7d77xe3VpmZ6zZ8NGBSsoZ2hmoihaXCDohsXaZzYxxi3DC-q6bdp_UUPIpIdAnFSR9mOq89f3ogVRvai1rI41ih0TV-op2vA3TFmlbMK-EFwOgvPCcLP8mpEsWp1BH9bofoIDdK11u-gkUXxE6Q8LQPzzjb_yy9qEK3DDUeGmdfZw19idN1UbIT7uHxt-Ro3g8BAA7_lzjiA_-lR84"
+  },
+  {
+   "position": 19,
+   "title": "GEM IVF",
+   "place_id": "ChIJW6FLP7dZqDsR0Db0jeRRARE",
+   "data_id": "0x3ba859b73f4ba15b:0x110151e48df436d0",
+   "data_cid": "1225350615697471184",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba859b73f4ba15b%3A0x110151e48df436d0&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba859b73f4ba15b%3A0x110151e48df436d0&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 10.999653499999999,
+    "longitude": 76.9954699
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJW6FLP7dZqDsR0Db0jeRRARE",
+   "provider_id": "/g/11xm07hnyy",
+   "rating": 5,
+   "reviews": 9,
+   "type": "Fertility clinic",
+   "types": [
+    "Fertility clinic"
+   ],
+   "type_id": "fertility_clinic",
+   "type_ids": [
+    "fertility_clinic"
+   ],
+   "country": "India",
+   "open_state": "Open 24 hours",
+   "unsupported_extensions": [
+    {
+     "service_options": [
+      "Onsite services"
+     ]
+    }
+   ],
+   "service_options": {
+    "onsite_services": false
+   },
+   "serpapi_thumbnail": "https://serpapi.com/images/url/omdqv3icHcTdboIwGADQJ6q0wYlbsgtAtLoIG5LOcEOk1Fb-Cv06ML7krn2bJTsX5_mrrB3gzXFa5S6k1rIVPyAM170VvV1w3TnSXAAQB8cPp6Ht4vXmu5nr7IRztx75NiQ-WKKTz56xgSfGO4ckPczjHlNyKALpAX0t4woal7LohRHNiJd4kGd54NPsim9HItiJiWJbPpadyfjDr84krVB5D1C84vi2i9RHG9WpWsnjSL9KvLmvl9Ol2Ztiep8Jxhip_znq_wBjZEZl"
+  },
+  {
+   "position": 20,
+   "title": "Lotus Fertility & Women\u2019s Centre",
+   "place_id": "ChIJNWuX1QJZqDsR02bMtjNdPBc",
+   "data_id": "0x3ba85902d5976b35:0x173c5d33b6cc66d3",
+   "data_cid": "1674315638166546131",
+   "reviews_link": "https://serpapi.com/search.json?data_id=0x3ba85902d5976b35%3A0x173c5d33b6cc66d3&engine=google_maps_reviews&hl=en",
+   "photos_link": "https://serpapi.com/search.json?data_id=0x3ba85902d5976b35%3A0x173c5d33b6cc66d3&engine=google_maps_photos&hl=en",
+   "gps_coordinates": {
+    "latitude": 11.0107612,
+    "longitude": 76.952995
+   },
+   "place_id_search": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&place_id=ChIJNWuX1QJZqDsR02bMtjNdPBc",
+   "provider_id": "/g/11g6blqzrd",
+   "rating": 4.6,
+   "reviews": 41,
+   "type": "Hospital",
+   "types": [
+    "Hospital"
+   ],
+   "country": "India",
+   "open_state": "Closed \u00b7 Opens 10\u202fAM",
+   "serpapi_thumbnail": "https://serpapi.com/images/url/vKvfhHicHcTd0kJAAADQJ9rQJ6WZ76JktJWE9VM3jSyrsdjsIr1hj9DbNNO5OJ93IQTjS0mixd-ENA2hWcezNm1qkdVikjaVRNqEc5ByaWX0jFYOaN3H_lwSQ7xMzY_DvE9CiKb7B9M093CYeWV3D8anYzh9h-1qYeOIBtN5yKw-12MvgzrSbVUxExVt4M7xjnhQfYyjy7AGBCv3Ew2j0nSF6m9RPA7A2qzZCGt0m1v57NhFrkKvAVz9D4osy6D4nYL6Cyu4RSU"
+  }
+ ],
+ "serpapi_pagination": {
+  "next": "https://serpapi.com/search.json?engine=google_maps&google_domain=google.com&hl=en&ll=%4011.0168%2C76.9558%2C14z&q=fertility+clinic&start=20&type=search"
+ }
+}
