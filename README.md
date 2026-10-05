@@ -39,7 +39,7 @@ To run on any place live, put a key in `.env` (`cp .env.example .env`, then set 
 make demo          # build the UI, serve everything on http://127.0.0.1:8000
 make dev           # API with reload on :8000 + Vite on http://localhost:5173
 uv run python -m nakshatra.cli "<google maps link or data_id>" --budget 60 [--offline]
-make test          # 134 tests; none of them calls SerpApi
+make test          # 133 tests; none of them calls SerpApi
 make eval          # every evaluation below, from cache and synthetic data (0 credits, ~20 min)
 ```
 
