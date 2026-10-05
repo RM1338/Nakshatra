@@ -91,7 +91,7 @@ Never-cut items (MVP §3): **M5, M6, M11**.
 | DM §5.3 | Integrity check | `python -m nakshatra.store.check` returns 0 rows | `store.check` | done (`test_store`, `test_e2e_slice`) |
 
 **Should** (after all Musts; status Oct 5: **all done**: S1, S2, S3 MD + PDF, S4, S5, S6): S1 hot-place refinement (CR-7), S2 lockstep (DT-5), S3 dossier MD/PDF (RP-4), S4 ledger drawer, S5 cancel with partial result, S6 ring guards. Refinement and lockstep are cheap and sit in the core loop, so they are built right after the Must slice (PLAN T17 and T20 are scheduled Oct 7).
-**Could:** C1 place search, C2 MinHash, C3 LLM narrator, C4 repeat clients, C5 upstream PR.
+**Could:** C1 place search (**done** Oct 5), C2 MinHash, C3 LLM narrator, C4 repeat clients, C5 upstream PR.
 **Cut order** (first to go): C3, C5, C4, C2, C1, S3-PDF, S6, S5, S1.
 **Won't:** other platforms, accounts/hosting/mobile, supervised ML, monitoring, Hindi/Tamil normalisation, Docker.
 

@@ -23,7 +23,7 @@ from starlette.exceptions import HTTPException
 from nakshatra import __version__
 from nakshatra.errors import NakshatraError
 from nakshatra.orchestrator.events import TERMINAL_EVENTS
-from nakshatra.orchestrator.run import Run, parse_place, status_of
+from nakshatra.orchestrator.run import Run, parse_place, place_search, status_of
 from nakshatra.report.dossier import render_md, render_pdf
 from nakshatra.settings import Config, Env, load_config
 from nakshatra.store.db import SCHEMA_VERSION, Store
@@ -36,7 +36,7 @@ HEARTBEAT_S = 10.0
 IDEMPOTENCY_S = 600.0
 STATUS = {"E_VALIDATION": 422, "E_BAD_PLACE": 400, "E_BUDGET": 422, "E_RUN_ACTIVE": 409, "E_RUN_TERMINAL": 409,
           "E_RUN_NOT_DONE": 409, "E_NOT_FOUND": 404, "E_FORMAT": 415, "E_PDF_UNAVAILABLE": 501, "E_AUTH": 503,
-          "E_INTERNAL": 500}
+          "E_CACHE_MISS": 409, "E_QUOTA": 502, "E_UPSTREAM": 502, "E_INTERNAL": 500}  # last 3: SRS App. A
 WEB_DIST = Path(__file__).parents[2] / "web" / "dist"
 
 
@@ -255,6 +255,24 @@ def create_app(store: Store | None = None, cfg: Config | None = None, env: Env |
                   "search_id": x["search_id"]} for x in rows[:limit]]
         return {"run_id": run_id, "totals": st.store.ledger_totals(run_id), "items": items,
                 "next": items[-1]["id"] if len(rows) > limit else None}
+
+    @r.get("/places/search")
+    async def search_places(request: Request, q: str = Query(min_length=2, max_length=200),
+                            ll: str | None = Query(None, pattern=r"^@-?\d+(\.\d+)?,-?\d+(\.\d+)?,\d+(\.\d+)?z$"),
+                            near: str | None = Query(None, max_length=200)) -> list:
+        """1 credit unless cached, ledgered under the sentinel run (API §5.4). Offline: cache only."""
+        st = S(request)
+        offline = st.env.nakshatra_offline
+        if not offline and not st.env.serpapi_api_key:
+            raise NakshatraError("E_AUTH", "No SerpApi key found. Searching needs a key; replay works without one.")
+        kw = {k: v for k, v in st.run_kwargs().items() if k in ("http", "clock")}
+        try:
+            return await place_search(st.store, st.cfg, st.env.serpapi_api_key, offline, SENTINEL,
+                                      f"{q} {near}".strip() if near else q, ll, **kw)
+        except NakshatraError as e:
+            if e.code == "E_CACHE_MISS":
+                raise NakshatraError("E_CACHE_MISS", "This search isn't in the offline cache.") from e
+            raise
 
     @r.get("/health")
     async def health(request: Request) -> dict:

@@ -151,7 +151,7 @@ class World:
                 return {"search_metadata": {"status": "Error"}, "error": "Google hasn't returned any results"}
             return {**self._meta(), "place_results": self._place_json(idx)}
         if engine == "google_maps":
-            hits = [i for i, p in enumerate(self.places) if p["type"] == q.get("q")][:20]
+            hits = [i for i, p in enumerate(self.places) if p["type"].lower() in (q.get("q") or "").lower()][:20]
             return {**self._meta(), "local_results": [self._place_json(i) for i in hits]}
         if engine == "google_maps_reviews":
             p = next(i for i, x in enumerate(self.places) if x["data_id"] == q["data_id"])

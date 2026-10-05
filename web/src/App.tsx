@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import GraphCanvas, { RING_COLORS } from './GraphCanvas';
 import { api, ApiError, findPlaceId } from './api';
 import { useRunStream } from './useRunStream';
-import type { EvidencePlace, Health, LedgerPage, Phase, Problem, Ring, RunStatus, RunSummary } from './types';
+import type { EvidencePlace, Health, LedgerPage, Phase, PlaceCandidate, Problem, Ring, RunStatus, RunSummary } from './types';
 
 // ---------- routing: "/" and "/runs/:id" (UF §3) ----------
 type Route = { name: 'home'; banner?: string } | { name: 'run'; id: string };
@@ -62,6 +62,7 @@ function Home({ banner, go }: { banner?: string; go: (p: string, b?: string) => 
   const [problem, setProblem] = useState<Problem | null>(null);
   const [activeRun, setActiveRun] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [picked, setPicked] = useState<string | null>(null);
   const id = findPlaceId(text);
   // UF §3: offer cache-only runs when there is no key, or when this place was crawled before (0 credits).
   const cached = !!id && recent.some((r) => r.state === 'done' && r.seed_data_id?.toLowerCase() === id.toLowerCase());
@@ -108,11 +109,11 @@ function Home({ banner, go }: { banner?: string; go: (p: string, b?: string) => 
         )}
         <form onSubmit={start} className="investigate">
           <label htmlFor="place" className="sr-only">Google Maps link or place ID</label>
-          <input id="place" autoFocus value={text} onChange={(e) => { setText(e.target.value); setProblem(null); }}
+          <input id="place" autoFocus value={text} onChange={(e) => { setText(e.target.value); setProblem(null); setPicked(null); }}
                  placeholder="Paste a Google Maps link" autoComplete="off" spellCheck={false}
                  aria-describedby="place-help" aria-invalid={problem?.code === 'E_BAD_PLACE'} />
           <p id="place-help" className={`helper ${problem ? 'is-error' : id ? 'is-ok' : ''}`} aria-live="polite">
-            {problem ? problemCopy(problem) : id ? 'Found a place ID. Ready to investigate.' : ' '}
+            {problem ? problemCopy(problem) : id ? (picked ? `Selected ${picked}. Ready to investigate.` : 'Found a place ID. Ready to investigate.') : ' '}
             {problem?.code === 'E_RUN_ACTIVE' && activeRun &&
               <> <a href={`/runs/${activeRun}`} onClick={(e) => { e.preventDefault(); go(`/runs/${activeRun}`); }}>View it</a></>}
           </p>
@@ -132,6 +133,10 @@ function Home({ banner, go }: { banner?: string; go: (p: string, b?: string) => 
             <button type="submit" className="primary" disabled={busy}>Investigate</button>
           </div>
         </form>
+        <PlaceSearch offline={!!keyMissing || !!health?.offline_forced} onPick={(c) => {
+          setText(c.data_id); setPicked(c.title); setProblem(null);
+          document.getElementById('place')?.focus();
+        }} />
         {recent.length > 0 && (
           <nav className="recent" aria-label="Recent investigations">
             <h2>Recent investigations</h2>
@@ -152,6 +157,56 @@ function Home({ banner, go }: { banner?: string; go: (p: string, b?: string) => 
         )}
       </section>
     </main>
+  );
+}
+
+// ---------- S1b place search (UF §3, Flow B) ----------
+function PlaceSearch({ offline, onPick }: { offline: boolean; onPick: (c: PlaceCandidate) => void }) {
+  const [open, setOpen] = useState(false);
+  const [q, setQ] = useState('');
+  const [near, setNear] = useState('');
+  const [items, setItems] = useState<PlaceCandidate[] | null>(null);
+  const [problem, setProblem] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  if (!open) return <button className="link search-toggle" onClick={() => setOpen(true)}>or search a place</button>;
+  const run = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (q.trim().length < 2) return;
+    setBusy(true); setProblem(null);
+    try { setItems(await api.search(q.trim(), near.trim())); }
+    catch (err) {
+      setItems(null);
+      setProblem(err instanceof ApiError
+        ? err.problem.code === 'E_CACHE_MISS' ? "This search isn't in the offline cache. Add a SerpApi key to search live."
+          : problemCopy(err.problem)
+        : 'Search failed. Try again.');
+    } finally { setBusy(false); }
+  };
+  return (
+    <section className="place-search" aria-label="Search a place">
+      <form onSubmit={run} className="search-row">
+        <label><span>What</span><input value={q} onChange={(e) => setQ(e.target.value)} placeholder="packers and movers" /></label>
+        <label><span>Where</span><input value={near} onChange={(e) => setNear(e.target.value)} placeholder="Gandhipuram, Coimbatore" /></label>
+        <button type="submit" disabled={busy || q.trim().length < 2}>{busy ? 'Searching…' : offline ? 'Search the cache' : 'Search (1 credit)'}</button>
+      </form>
+      {problem && <p className="helper is-error">{problem}</p>}
+      {items && items.length === 0 && <p className="muted">No places found. Try a broader search.</p>}
+      {items && items.length > 0 && (
+        <ul className="candidates">
+          {items.map((c) => (
+            <li key={c.data_id}>
+              <button disabled={!c.eligible} onClick={() => onPick(c)}>
+                <span className="cand-title">{c.title}</span>
+                <span className="muted">
+                  {c.rating ?? '–'} stars, {c.d_p ?? 0} reviews{c.address ? `, ${c.address}` : ''}
+                  {!c.eligible && <>. Too few reviews to test</>}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
 

@@ -184,3 +184,29 @@ def test_dossier(done_run):
     assert_envelope(c.get(f"/api/v1/runs/{rid}/dossier?format=docx"), 415, "E_FORMAT")
     pdf = c.get(f"/api/v1/runs/{rid}/dossier?format=pdf")
     assert (pdf.status_code == 200 and pdf.content[:4] == b"%PDF") or pdf.json()["error"]["code"] == "E_PDF_UNAVAILABLE"
+
+
+def test_place_search(tmp_path):
+    w = World(seed_d_p=320)
+    with client(tmp_path, world=w) as c:
+        r = c.get("/api/v1/places/search", params={"q": "Fertility clinic", "near": "Coimbatore"})
+        assert r.status_code == 200, r.text
+        cands = r.json()
+        assert 0 < len(cands) <= 10 and all(set(x) >= {"data_id", "title", "eligible"} for x in cands)
+        assert all(x["eligible"] == (x["d_p"] is not None and x["d_p"] >= 20) for x in cands)
+        calls = w.calls
+        assert c.get("/api/v1/places/search", params={"q": "Fertility clinic", "near": "Coimbatore"}).json() == cands
+        assert w.calls == calls  # repeat search is served from cache
+        led = c.get("/api/v1/runs/r_0000000000/ledger")
+        assert_envelope(led, 404, "E_NOT_FOUND")  # the sentinel is not a run the UI can open
+        assert_envelope(c.get("/api/v1/places/search", params={"q": "x"}), 422, "E_VALIDATION")
+        assert_envelope(c.get("/api/v1/places/search", params={"q": "clinic", "ll": "Coimbatore"}), 422, "E_VALIDATION")
+
+
+def test_place_search_needs_key_or_cache(tmp_path):
+    with client(tmp_path, key="") as c:
+        assert_envelope(c.get("/api/v1/places/search", params={"q": "clinic"}), 503, "E_AUTH")
+    env = Env(_env_file=None, serpapi_api_key="", nakshatra_offline=True, nakshatra_db=tmp_path / "o.db")
+    app = create_app(Store(tmp_path / "o.db"), load_config(), env, lambda: {"http": httpx.AsyncClient(transport=W.transport())})
+    with TestClient(app) as c:
+        assert_envelope(c.get("/api/v1/places/search", params={"q": "clinic"}), 409, "E_CACHE_MISS")

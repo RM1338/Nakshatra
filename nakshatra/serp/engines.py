@@ -27,6 +27,12 @@ async def maps_category(c: SerpClient, tok: Token, query: str, lat: float, lng: 
                                          MAPS_SEARCH_FIELDS), tok)
 
 
+async def maps_search(c: SerpClient, tok: Token, query: str, ll: str | None) -> Response:
+    """Free-text place search (API §5.4); `ll` is '@lat,lng,zoomz' when the user gives coordinates."""
+    p = {"type": "search", "q": query} | ({"ll": ll} if ll else {})
+    return await c.get("google_maps", _r(c, p, MAPS_SEARCH_FIELDS), tok)
+
+
 async def place_reviews(c: SerpClient, tok: Token, data_id: str, sort_by: str, page_token: str | None) -> Response:
     p: dict = {"data_id": data_id, "sort_by": sort_by}
     if page_token:

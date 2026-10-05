@@ -429,3 +429,27 @@ async def run_once(place: str, budget: int, *, db: str | Path | None = None, off
               clock=(lambda: now) if now is not None else time.time)
     await run.execute()
     return run.status()
+
+
+async def place_search(store: Store, cfg: Config, api_key: str, offline: bool, ledger_run: str, query: str,
+                       ll: str | None, http: httpx.AsyncClient | None = None,
+                       clock: Callable[[], float] = time.time) -> list[dict[str, Any]]:
+    """Candidate places for a query (API §5.4, SRS-IN-5): 1 credit unless cached, ledgered under `ledger_run`."""
+    budget = Budget(1, (1.0, 0.0, 0.0))
+    client = SerpClient(store, api_key, offline, ledger_run, budget, restrict=cfg.serp.json_restrictor,
+                        clock=clock, http=http)
+    try:
+        resp = await E.maps_search(client, budget.reserve("sample"), query, ll)
+    finally:
+        await client.aclose()
+        # ponytail: the sentinel's CHECK (used <= 200) caps lifetime searches at 200; roll a new sentinel if ever hit
+        store.run_update(ledger_run, used=store.ledger_totals(ledger_run)["billed"])
+    out = []
+    for x in (resp.data.get("local_results") or [])[:10]:
+        if not x.get("data_id"):
+            continue
+        d_p = I._int(x.get("reviews"))
+        out.append({"data_id": x["data_id"], "title": x.get("title") or "", "type": I._str(x.get("type")),
+                    "rating": x.get("rating"), "d_p": d_p, "address": x.get("address"),
+                    "eligible": d_p is not None and d_p >= MIN_SEED_REVIEWS})
+    return out

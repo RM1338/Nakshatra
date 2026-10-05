@@ -33,13 +33,13 @@ make replay        # judge mode: shipped data/demo.db, no key, 0 credits -> http
 
 In replay mode, open a run from "Recent investigations" and press **Replay offline**. **Export dossier** downloads the evidence as Markdown or PDF: every group with its accounts' contributor IDs, shared places and dates, the statistics, and the SerpApi search ID behind every call. It is meant for reporting to Google or a consumer authority. The whole investigation streams again from the cache, with the same result. `Example Fertility Centre (synthetic city)` is the planted-crew case. The real Coimbatore clinics and landmarks are the clean cases.
 
-To run on any place live, put a key in `.env` (`cp .env.example .env`, then set `SERPAPI_API_KEY`):
+No link to hand? "or search a place" on the home screen finds candidates by category and area (1 credit per new search) and greys out places with too few reviews to test. To run on any place live, put a key in `.env` (`cp .env.example .env`, then set `SERPAPI_API_KEY`):
 
 ```bash
 make demo          # build the UI, serve everything on http://127.0.0.1:8000
 make dev           # API with reload on :8000 + Vite on http://localhost:5173
 uv run python -m nakshatra.cli "<google maps link or data_id>" --budget 60 [--offline]
-make test          # 133 tests; none of them calls SerpApi
+make test          # 135 tests; none of them calls SerpApi
 make eval          # every evaluation below, from cache and synthetic data (0 credits, ~20 min)
 ```
 

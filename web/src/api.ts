@@ -1,4 +1,4 @@
-import type { Health, LedgerPage, Problem, RunStatus, RunSummary } from './types';
+import type { Health, LedgerPage, PlaceCandidate, Problem, RunStatus, RunSummary } from './types';
 
 const BASE = '/api/v1';
 
@@ -22,6 +22,8 @@ export const api = {
   health: () => call<Health>('/health'),
   runs: () => call<RunSummary[]>('/runs?limit=50'),
   run: (id: string) => call<RunStatus>(`/runs/${id}`),
+  search: (q: string, near: string) =>
+    call<PlaceCandidate[]>(`/places/search?${new URLSearchParams(near ? { q, near } : { q })}`),
   cancel: (id: string) => call<RunStatus>(`/runs/${id}/cancel`, { method: 'POST' }),
   ledger: (id: string) => call<LedgerPage>(`/runs/${id}/ledger?limit=500`),
   create: (place: string, budget: number, offline: boolean) =>

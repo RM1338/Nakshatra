@@ -57,6 +57,18 @@ button.link { border: 0; background: none; padding: 0; text-decoration: underlin
 .recent ul { list-style: none; margin: 0; padding: 0; }
 .recent li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0; border-bottom: 1px solid var(--paper-edge); font-size: var(--step--1); }
 
+.search-toggle { align-self: flex-start; font-size: var(--step--1); }
+.place-search { display: flex; flex-direction: column; gap: 0.6rem; }
+.search-row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: flex-end; }
+.search-row label { display: flex; flex-direction: column; gap: 0.2rem; flex: 1 1 160px; font-size: var(--step--1); color: var(--muted); }
+.search-row input { padding: 0.5rem 0.7rem; border: 1px solid var(--paper-edge); border-radius: 6px; background: #fff; color: var(--ink); }
+.candidates { list-style: none; margin: 0; padding: 0; max-height: 260px; overflow-y: auto; border-top: 1px solid var(--paper-edge); }
+.candidates button { width: 100%; text-align: left; display: flex; flex-direction: column; border: 0; border-bottom: 1px solid var(--paper-edge); border-radius: 0; background: none; padding: 0.5rem 0.25rem; }
+.candidates button:hover:not(:disabled) { background: #fff; }
+.candidates button:disabled { opacity: 0.55; cursor: not-allowed; }
+.cand-title { font-weight: 700; }
+.candidates .muted { font-size: var(--step--1); }
+
 /* ---------- S2/S3 run ---------- */
 .run { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr); }
 .topbar { display: flex; align-items: center; gap: 1.25rem; padding: 0.6rem 1.25rem; background: var(--night-deep); color: var(--paper); border-bottom: 1px solid var(--night-line); }

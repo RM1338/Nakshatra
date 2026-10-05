@@ -39,3 +39,5 @@ export interface LedgerPage { run_id: string; items: LedgerItem[]; next: number 
 export interface Health { status: string; api_key_present: boolean; offline_forced: boolean; active_run: string | null }
 export interface RunSummary { run_id: string; state: Phase; seed_title: string | null; seed_data_id: string | null; started_at: number;
   credits_used: number; rings_reported: number }
+export interface PlaceCandidate { data_id: string; title: string; type: string | null; rating: number | null;
+  d_p: number | null; address: string | null; eligible: boolean }
