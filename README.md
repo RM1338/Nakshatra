@@ -24,7 +24,14 @@ Every call goes through one client: cache first, a budget reservation, a ledger 
 
 ## Try it
 
-You need Python ≥ 3.11 with [uv](https://docs.astral.sh/uv/), and Node ≥ 20.
+You need Python ≥ 3.11 with [uv](https://docs.astral.sh/uv/), and Node ≥ 20. One command installs everything, starts the backend and the frontend, and opens your browser:
+
+```bash
+./run.sh --replay  # demo data, no key, 0 credits
+./run.sh           # live: uses SERPAPI_API_KEY from .env
+```
+
+Or step by step:
 
 ```bash
 make install       # Python + web dependencies

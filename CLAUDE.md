@@ -18,6 +18,7 @@ Nakshatra: a local app that takes one Google Maps place, spends a fixed SerpApi 
 ## Commands
 
 ```
+./run.sh [--replay]                       # install deps, start API :8000 + Vite :5173, open browser; Ctrl-C stops both
 uv sync                                   # install (Python 3.13 via uv; requires >= 3.11)
 make test                                 # ruff + pytest (tests never call SerpApi)
 uv run pytest tests/test_algo.py -k planted         # single test
