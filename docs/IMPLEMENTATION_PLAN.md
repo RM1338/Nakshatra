@@ -83,9 +83,9 @@ Never-cut items (MVP §3): **M5, M6, M11**.
 | **M6** / FR11 / DT-3,4 | Poisson display + permutation gate | m = 0 → p = 1; power-user pair unremarkable; degrees preserved; on null graphs share of p < α ≈ α | `algo.significance` | done; `s` uncalibrated (DECISIONS B8) |
 | M7 / FR14 / RP-1 | Adjusted rating, `newestFirst`, CI | I6 no-ring invariant; CI contains the point; same seed → same CI | `algo.rating` | done (`test_algo`) |
 | M8 / FR9 / IF-20,21 | SSE with replay | First node < 5 s; gapless seq; Last-Event-ID resume; no raw IDs | `api`, `orchestrator.events` | done (`test_api`); first-node latency to measure in the UI |
-| M9 / IF-1..6 / RP-2,3 | Result screen: rating card, verdict, ring cards, graph, place drawer | Flow A1–A9 in the browser | `web`, `report` | todo |
+| M9 / IF-1..6 / RP-2,3 | Result screen: rating card, verdict, ring cards, graph, place drawer | Flow A1–A9 in the browser | `web`, `report` | done (**G3** Oct 5; checked by scripted headless-Chromium screenshots, real + synthetic runs) |
 | M10 / NF-6 | Offline replay from `demo.db` | Clean clone, no key: replay identical (B3), 0 network calls | `store.export_demo`, `orchestrator` | todo |
-| **M11** / FR22 / OP-4 / NF-7..10 | Evaluation harness | `make eval` reproduces committed plots (injection grid, controls, null calibration, credit efficiency) | `eval/` | todo |
+| **M11** / FR22 / OP-4 / NF-7..10 | Evaluation harness | `make eval` reproduces committed plots (injection grid, controls, null calibration, credit efficiency) | `eval/` | done; results under `eval/plots/*_<config hash>` |
 | M12 | README | Insight, prior art, integration map, method, results, limitations, demo | `README.md` | todo |
 | NF-11..14 | Security, privacy, copy | Key grep test; localhost bind; banned-word lint | cross-cutting | done (key, copy, `make dev` binds 127.0.0.1) |
 | DM §5.3 | Integrity check | `python -m nakshatra.store.check` returns 0 rows | `store.check` | done (`test_store`, `test_e2e_slice`) |
@@ -152,6 +152,12 @@ All four are automated in `tests/test_e2e_slice.py`. **Status: done (Oct 5).** S
 | --- | --- | --- | --- |
 | Oct 5 | T02 field-shape probes (sentinel run) | 6 | DECISIONS C1–C7 |
 | Oct 5 | **G1**: CLI live on a real 84-review Coimbatore fertility clinic (`0x3ba858e2ce004617:0xbf828b878d37ae96`) | 18 + 9 | Clean result. The first attempt exposed A18 (1-review accounts expanded first); the rerun followed 9 feasible reviewers across 65 places. Open question for T32: does the 0 → 0 plateau (A15) stop too early on places with ~30 feasible reviewers? |
+
+| Oct 5 | Category search "tourist attraction" (sentinel), for controls | 1 | Control candidates |
+| Oct 5 | Clinic #2: Vamsam Hospital & Fertility Centre (`0x3ba85983d088966d:0xeb6a844b48844f9b`) | 22 | Clean: 9 reviewers, 47 places |
+| Oct 5 | Controls: Gass Forest Museum, Valankulam Boat House (budget 25 each) | 14 + 14 | Clean, 0 candidates. Used for τ (A21) |
+
+Balance after scouting: **166 of 250** (SerpApi's own count matches the ledger).
 
 ## 8. Blocked on the user
 

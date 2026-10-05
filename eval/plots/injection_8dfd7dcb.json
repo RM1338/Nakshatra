@@ -7,10 +7,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "12x12x0.3": {
    "camo": 0.3,
@@ -19,10 +19,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "12x12x0.6": {
    "camo": 0.6,
@@ -31,10 +31,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "12x5x0.0": {
    "camo": 0.0,
@@ -43,10 +43,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "12x5x0.3": {
    "camo": 0.3,
@@ -55,10 +55,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "12x5x0.6": {
    "camo": 0.6,
@@ -67,10 +67,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "12x8x0.0": {
    "camo": 0.0,
@@ -79,10 +79,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "12x8x0.3": {
    "camo": 0.3,
@@ -91,10 +91,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "12x8x0.6": {
    "camo": 0.6,
@@ -103,10 +103,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "5x12x0.0": {
    "camo": 0.0,
@@ -115,10 +115,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "5x12x0.3": {
    "camo": 0.3,
@@ -127,10 +127,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "5x12x0.6": {
    "camo": 0.6,
@@ -139,10 +139,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "5x5x0.0": {
    "camo": 0.0,
@@ -151,10 +151,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "5x5x0.3": {
    "camo": 0.3,
@@ -163,10 +163,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "5x5x0.6": {
    "camo": 0.6,
@@ -175,10 +175,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "5x8x0.0": {
    "camo": 0.0,
@@ -187,10 +187,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "5x8x0.3": {
    "camo": 0.3,
@@ -199,10 +199,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "5x8x0.6": {
    "camo": 0.6,
@@ -211,10 +211,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "8x12x0.0": {
    "camo": 0.0,
@@ -223,10 +223,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "8x12x0.3": {
    "camo": 0.3,
@@ -235,10 +235,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "8x12x0.6": {
    "camo": 0.6,
@@ -247,10 +247,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "8x5x0.0": {
    "camo": 0.0,
@@ -259,10 +259,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "8x5x0.3": {
    "camo": 0.3,
@@ -271,10 +271,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "8x5x0.6": {
    "camo": 0.6,
@@ -283,10 +283,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "8x8x0.0": {
    "camo": 0.0,
@@ -295,10 +295,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "8x8x0.3": {
    "camo": 0.3,
@@ -307,10 +307,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "8x8x0.6": {
    "camo": 0.6,
@@ -319,16 +319,19 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   }
  },
- "config_hash": "48190e0af55750dc85d1c64a1252da34a225743c15685cbc8cd36bce52307605",
+ "config_hash": "8dfd7dcb0b46b7635404cc244c487844a45a081dd69ea93a198b00ed0b2bca51",
  "seed": 7,
  "sources": [
+  "real:534760ec",
   "real:8d37ae96",
+  "real:b6179b48",
+  "real:48844f9b",
   "synth:100",
   "synth:101",
   "synth:102"
@@ -342,11 +345,11 @@
    ],
    "native": 0,
    "precision": 1.0,
-   "recall": 0.5,
+   "recall": 0.2857142857142857,
    "recovered": 2,
    "reported_matching": 2,
    "reported_touching": 2,
-   "trials": 4
+   "trials": 7
   },
   "cov0.4_dp5-60": {
    "coverage": 0.4,
@@ -356,11 +359,11 @@
    ],
    "native": 0,
    "precision": 1.0,
-   "recall": 0.75,
-   "recovered": 3,
-   "reported_matching": 3,
-   "reported_touching": 3,
-   "trials": 4
+   "recall": 0.5714285714285714,
+   "recovered": 4,
+   "reported_matching": 4,
+   "reported_touching": 4,
+   "trials": 7
   },
   "cov0.4_dp500-2000": {
    "coverage": 0.4,
@@ -374,7 +377,7 @@
    "recovered": 0,
    "reported_matching": 0,
    "reported_touching": 0,
-   "trials": 4
+   "trials": 7
   },
   "cov0.6_dp100-400": {
    "coverage": 0.6,
@@ -384,11 +387,11 @@
    ],
    "native": 0,
    "precision": 1.0,
-   "recall": 0.75,
-   "recovered": 3,
-   "reported_matching": 3,
-   "reported_touching": 3,
-   "trials": 4
+   "recall": 0.7142857142857143,
+   "recovered": 5,
+   "reported_matching": 5,
+   "reported_touching": 5,
+   "trials": 7
   },
   "cov0.6_dp5-60": {
    "coverage": 0.6,
@@ -396,13 +399,13 @@
     5,
     60
    ],
-   "native": 0,
+   "native": 1,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "cov0.6_dp500-2000": {
    "coverage": 0.6,
@@ -412,11 +415,11 @@
    ],
    "native": 0,
    "precision": 1.0,
-   "recall": 0.5,
-   "recovered": 2,
-   "reported_matching": 2,
-   "reported_touching": 2,
-   "trials": 4
+   "recall": 0.5714285714285714,
+   "recovered": 4,
+   "reported_matching": 4,
+   "reported_touching": 4,
+   "trials": 7
   },
   "cov0.85_dp100-400": {
    "coverage": 0.85,
@@ -427,10 +430,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "cov0.85_dp5-60": {
    "coverage": 0.85,
@@ -441,10 +444,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   },
   "cov0.85_dp500-2000": {
    "coverage": 0.85,
@@ -455,10 +458,10 @@
    "native": 0,
    "precision": 1.0,
    "recall": 1.0,
-   "recovered": 4,
-   "reported_matching": 4,
-   "reported_touching": 4,
-   "trials": 4
+   "recovered": 7,
+   "reported_matching": 7,
+   "reported_touching": 7,
+   "trials": 7
   }
  },
  "summary_rings_ge_8": {

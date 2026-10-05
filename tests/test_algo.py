@@ -170,8 +170,10 @@ def test_gate_passes_planted_ring():
     plant(g, s)
     adj, c = peel.build(g, s)
     rings = peel.mine(adj, c, **RING)
-    p = significance.permutation_gate(adj, c, rings, RING, 60, seed=1)
+    p, null_ov = significance.permutation_gate(adj, c, rings, RING, 60, seed=1)
     assert p[0] == pytest.approx(1 / 61)
+    obs = significance.display_stat(rings[0], adj, {u: len(adj[u]) for u in adj}, 1e-3)["observed_overlap"]
+    assert null_ov[0] < 1.0 < obs  # chance explains almost none of the planted crew's overlap (A22)
 
 
 def test_gate_calibrated_on_null_graphs():
@@ -181,7 +183,7 @@ def test_gate_calibrated_on_null_graphs():
         g, s = random_graph(n_users=60, n_places=80, seed=100 + k, mean_k=5)
         adj, c = peel.build(g, s)
         rings = peel.mine(adj, c, **RING)
-        ps = significance.permutation_gate(adj, c, rings[:1], RING, 40, seed=k)
+        ps, _ = significance.permutation_gate(adj, c, rings[:1], RING, 40, seed=k)
         reported += bool(ps and ps[0] < 0.1)
     assert reported <= 6  # 30 * 0.1 = 3 expected; generous binomial margin
 

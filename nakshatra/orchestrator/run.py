@@ -318,7 +318,8 @@ class Run:
         c, g = self.cfg, self.g
         base_dps = [I._int(b.get("reviews")) or 0 for b in self.baseline if b["data_id"] not in g.pix]
         judged = await asyncio.to_thread(judge, g, self.seed, base_dps, c)
-        scored = [(j.ring, j.display, j.p_perm, j.reported, j.lockstep) for j in judged]
+        scored = [(j.ring, {**j.display, "null_overlap": j.null_overlap}, j.p_perm, j.reported, j.lockstep)
+                  for j in judged]
         rings = [j.ring for j in judged]
         reported = [r for r, _, _, ok, _ in scored if ok]
 
@@ -341,7 +342,8 @@ class Run:
                 "stream_members": [self.sid(u) for u in r.users],
                 "places": [{"data_id": g.places[p].data_id, "title": g.places[p].title, "d_p": g.places[p].d_p}
                            for p in r.places],
-                "density": round(r.density, 4), "expected_overlap": R.sig3(st["expected_overlap"]),
+                "density": round(r.density, 4), "expected_overlap": R.sig3(st["null_overlap"]),
+                "poisson_expected": R.sig3(st["expected_overlap"]),
                 "observed_overlap": R.sig3(st["observed_overlap"]), "pval": R.sig3(p_perm),
                 "pair_pval": R.sig3(st["pair_pval"]), "lockstep_ratio": None if lock is None else round(lock, 3),
                 "reported": ok, "evidence": self._evidence(r, names)})
@@ -358,7 +360,7 @@ class Run:
         with self.store.tx():
             for (r, st, p_perm, ok, lock), o in zip(scored, out_rings, strict=True):
                 self.store.ring_put(self.id, o["idx"], [cids[u] for u in r.users],
-                                    [g.places[p].data_id for p in r.places], r.density, st["expected_overlap"],
+                                    [g.places[p].data_id for p in r.places], r.density, st["null_overlap"],
                                     st["observed_overlap"], p_perm, lock, ok)
                 if ok:  # excerpts are kept only for ring members' ring-place reviews (DM §8)
                     for u in r.users:

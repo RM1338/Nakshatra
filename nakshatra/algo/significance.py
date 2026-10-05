@@ -55,15 +55,24 @@ def curveball(adj_u: Adj, rng: np.random.Generator, trades_per_user: int = 5) ->
 
 
 def permutation_gate(adj_u: Adj, c: dict[int, float], rings: list[Ring], ring_cfg: dict, n_perm: int,
-                     seed: int) -> list[float]:
-    """p_i = (1 + #{null's i-th best ring density >= g_i}) / (N + 1), with the same miner on each null."""
+                     seed: int) -> tuple[list[float], list[float]]:
+    """p_i = (1 + #{null's i-th best ring density >= g_i}) / (N + 1), with the same miner on each null.
+
+    Also returns, per ring, the mean number of places two of its accounts share in the null graphs: the
+    "expected by chance" figure shown to users, from the same null that decides reporting (DECISIONS A22).
+    """
     if not rings:
-        return []
+        return [], []
     rng = np.random.default_rng(seed)
     exceed = [0] * len(rings)
+    shared = [0.0] * len(rings)
+    pairs = [list(combinations(r.users, 2)) for r in rings]
     for _ in range(n_perm):
-        null = mine(curveball(adj_u, rng), c, **ring_cfg)
+        g0 = curveball(adj_u, rng)
+        null = mine(g0, c, **ring_cfg)
         for i, r in enumerate(rings):
             if i < len(null) and null[i].density >= r.density:
                 exceed[i] += 1
-    return [(1 + e) / (n_perm + 1) for e in exceed]
+            if pairs[i]:
+                shared[i] += sum(len(g0[u] & g0[v]) for u, v in pairs[i]) / len(pairs[i])
+    return [(1 + e) / (n_perm + 1) for e in exceed], [x / n_perm for x in shared]

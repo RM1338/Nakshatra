@@ -1,10 +1,12 @@
-# Algorithm parameters (LLD §2, SRS App. B). Edit after calibration (ALG §10.1), then freeze.
+# Algorithm parameters (LLD §2, SRS App. B).
+# FROZEN Oct 5 (T31, DECISIONS A21): s and tau from eval.controls on 2 real + 5 synthetic controls;
+# prior weights stay hand-set (ALG §4.1 fallback). Changing anything here changes config_hash and the eval plots.
 budget: {default: 60, min: 20, max: 200, split: [0.20, 0.65, 0.15]}
 prior: {weights: [-1.0, 2.0, 0.8, 0.5, 0.6, 0.7]}
 expand: {hot_boost: 0.5, refine_every: 5, plateau_eps: 0.02, plateau_window: 8, backfill_cap: 5}
 ring: {min_users: 4, min_places: 3, min_coverage: 0.5, max_rings: 5}
 stats: {alpha: 0.01, mass_scale: 1.0, n_perm: 200, n_perm_max: 500, perm_seed: 11}
 time: {delta_days: 14, lockstep_share: 0.6, max_median_width_days: 30}
-rating: {kappa: 5, tau: 1.0, bootstrap_n: 1000, bootstrap_seed: 7}
+rating: {kappa: 5, tau: 0.6, bootstrap_n: 1000, bootstrap_seed: 7}
 serp: {json_restrictor: false}
 narrator_enabled: false

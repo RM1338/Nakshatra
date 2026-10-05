@@ -155,6 +155,7 @@ def create_app(store: Store | None = None, cfg: Config | None = None, env: Env |
     @r.get("/runs")
     async def list_runs(request: Request, limit: int = Query(20, ge=1, le=50), before: float | None = None) -> list:
         return [{"run_id": x["run_id"], "state": x["state"], "seed_title": x["seed_title"],
+                 "seed_data_id": x["seed_data_id"],
                  "started_at": x["started_at"], "credits_used": x["used"], "rings_reported": x["rings_reported"]}
                 for x in S(request).store.runs_list(limit, before)]
 
@@ -245,8 +246,11 @@ def create_app(store: Store | None = None, cfg: Config | None = None, env: Env |
 
         @app.get("/{path:path}", include_in_schema=False)
         async def spa(path: str) -> Any:
-            f = WEB_DIST / path
-            return FileResponse(f if path and f.is_file() else WEB_DIST / "index.html")
+            if path == "api" or path.startswith("api/"):
+                raise NakshatraError("E_NOT_FOUND", f"no endpoint /{path}")
+            f = (WEB_DIST / path).resolve()
+            inside = f.is_relative_to(WEB_DIST.resolve())
+            return FileResponse(f if path and inside and f.is_file() else WEB_DIST / "index.html")
 
     return app
 

@@ -7,8 +7,8 @@ BANNED = ("fake", "fraud", "scam", "fraudulent")
 _BANNED_RE = re.compile(r"\b(" + "|".join(BANNED) + r")", re.I)
 
 RING_TMPL = ("{n_users} accounts share {n_places} places that are unrelated to this business. "
-             "By chance, two accounts here would share about {exp:.2f} of those places; "
-             "these share {obs:.1f} on average.{lock}")
+             "If these accounts had spread the same number of reviews at random, two of them would share about "
+             "{exp:.1f} places; these share {obs:.1f} on average.{lock}")
 LOCK_TMPL = " At {lock_pct:.0f}% of those places, most of the accounts posted within {delta:.0f} days of each other."
 VERDICT_TMPL = ("{n_users} accounts reviewed the same {n_places} unrelated places{timing}. Setting their reviews "
                 "aside, the recent rating is {adj:.1f} ({lo:.1f}–{hi:.1f}).")

@@ -1,10 +1,19 @@
-.PHONY: install test lint check synth eval dev
+.PHONY: install test lint check synth eval dev demo web
 
-dev:                ## API on http://127.0.0.1:8000 with reload (the web UI joins in T26)
-	uv run uvicorn nakshatra.api.main:app --reload --host 127.0.0.1 --port 8000
+dev:                ## API on :8000 (reload) + Vite on http://localhost:5173 (proxies /api)
+	cd web && npm install --silent
+	trap 'kill 0' EXIT; uv run uvicorn nakshatra.api.main:app --reload --host 127.0.0.1 --port 8000 & \
+	  (cd web && npx vite --host 127.0.0.1)
 
-install:            ## Python deps (uv)
+web:                ## Build the SPA into web/dist
+	cd web && npm install --silent && npm run build
+
+demo: web           ## One process on http://127.0.0.1:8000 serving the built SPA
+	uv run uvicorn nakshatra.api.main:app --host 127.0.0.1 --port 8000
+
+install:            ## Python + web deps
 	uv sync
+	cd web && npm install --silent
 
 test:               ## Unit, contract and end-to-end tests (never call SerpApi)
 	uv run ruff check nakshatra tests eval
