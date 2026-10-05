@@ -66,7 +66,8 @@ class World:
                 "data_id": f"0x{self.seed:04x}{i:012x}:0x{(i * 7919 + 13):016x}", "title": f"Place {i}", "type": typ,
                 "d_p": d_p, "rating": round(float(rng.uniform(3.6, 4.9)), 1),
                 "lat": 11.0 + float(rng.uniform(-0.1, 0.1)), "lng": 76.95 + float(rng.uniform(-0.1, 0.1))})
-        seed = self._add_place("Example Fertility Centre", "Fertility clinic", self.seed_d_p, 4.8)
+        title = "Example Fertility Centre (synthetic city)" if self.ring_size else "Example Control Clinic (synthetic city)"
+        seed = self._add_place(title, "Fertility clinic", self.seed_d_p, 4.8)
         for j in range(20):  # same-category neighbours for the baseline search
             self._add_place(f"Clinic {j}", "Fertility clinic", int(rng.integers(40, 900)),
                             round(float(rng.uniform(3.8, 4.7)), 1))
@@ -210,7 +211,7 @@ def _main() -> None:
     ap.add_argument("--budget", type=int, default=60)
     args = ap.parse_args()
     for name, w in (("ring", World()), ("control", World(seed=8, ring_size=0))):
-        res = asyncio.run(run_once(w.seed_data_id, args.budget, db=args.db, api_key="synthetic",
+        res = asyncio.run(run_once(w.seed_data_id, args.budget, db=args.db, api_key="synthetic-crawl-dummy-key-not-real",
                                    http=httpx.AsyncClient(transport=w.transport()), now=NOW))
         print(name, w.seed_data_id, json.dumps({k: res.get(k) for k in ("state", "error")}))
 

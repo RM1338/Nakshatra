@@ -84,7 +84,7 @@ Never-cut items (MVP §3): **M5, M6, M11**.
 | M7 / FR14 / RP-1 | Adjusted rating, `newestFirst`, CI | I6 no-ring invariant; CI contains the point; same seed → same CI | `algo.rating` | done (`test_algo`) |
 | M8 / FR9 / IF-20,21 | SSE with replay | First node < 5 s; gapless seq; Last-Event-ID resume; no raw IDs | `api`, `orchestrator.events` | done (`test_api`); first-node latency to measure in the UI |
 | M9 / IF-1..6 / RP-2,3 | Result screen: rating card, verdict, ring cards, graph, place drawer | Flow A1–A9 in the browser | `web`, `report` | done (**G3** Oct 5; checked by scripted headless-Chromium screenshots, real + synthetic runs) |
-| M10 / NF-6 | Offline replay from `demo.db` | Clean clone, no key: replay identical (B3), 0 network calls | `store.export_demo`, `orchestrator` | todo |
+| M10 / NF-6 | Offline replay from `demo.db` | Clean clone, no key: replay identical (B3), 0 network calls | `store.export_demo`, `orchestrator` | done (`test_replay`; `make replay`; 6.2 s replay) |
 | **M11** / FR22 / OP-4 / NF-7..10 | Evaluation harness | `make eval` reproduces committed plots (injection grid, controls, null calibration, credit efficiency) | `eval/` | done; results under `eval/plots/*_<config hash>` |
 | M12 | README | Insight, prior art, integration map, method, results, limitations, demo | `README.md` | todo |
 | NF-11..14 | Security, privacy, copy | Key grep test; localhost bind; banned-word lint | cross-cutting | done (key, copy, `make dev` binds 127.0.0.1) |

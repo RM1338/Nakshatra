@@ -1,4 +1,4 @@
-.PHONY: install test lint check synth eval dev demo web
+.PHONY: install test lint check synth eval dev demo web replay demo-db
 
 dev:                ## API on :8000 (reload) + Vite on http://localhost:5173 (proxies /api)
 	cd web && npm install --silent
@@ -10,6 +10,11 @@ web:                ## Build the SPA into web/dist
 
 demo: web           ## One process on http://127.0.0.1:8000 serving the built SPA
 	uv run uvicorn nakshatra.api.main:app --host 127.0.0.1 --port 8000
+
+replay: web         ## Judge mode: shipped data/demo.db, offline forced, no key, 0 credits
+	cp data/demo.db data/replay.db
+	SERPAPI_API_KEY= NAKSHATRA_OFFLINE=1 NAKSHATRA_DB=data/replay.db \
+	  uv run uvicorn nakshatra.api.main:app --host 127.0.0.1 --port 8000
 
 install:            ## Python + web deps
 	uv sync

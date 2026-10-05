@@ -46,7 +46,7 @@ def redact(obj: Any, secret: str) -> Any:
         return {k: redact(v, secret) for k, v in obj.items()}
     if isinstance(obj, list):
         return [redact(v, secret) for v in obj]
-    if isinstance(obj, str) and len(secret) >= 8 and secret in obj:
+    if isinstance(obj, str) and len(secret) >= 16 and secret in obj:  # real keys are 64 chars
         return obj.replace(secret, "REDACTED")
     return obj
 
