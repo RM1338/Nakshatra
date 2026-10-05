@@ -149,3 +149,19 @@ def test_live_stream_is_gapless(tmp_path):
         ev = sse(c.get(f"/api/v1/runs/{rid}/events").text)  # opened immediately; ends at the terminal event
         assert [e[0] for e in ev] == list(range(1, len(ev) + 1)) and ev[-1][1] == "done"
         assert len(ev) == c.get(f"/api/v1/runs/{rid}/events").text.count("\nevent: ")
+
+
+def test_cancel_gives_partial_result(tmp_path):
+    with client(tmp_path) as c:
+        rid = c.post("/api/v1/runs", json={"place": W.seed_data_id, "budget": 60}).json()["run_id"]
+        r = c.post(f"/api/v1/runs/{rid}/cancel")
+        assert r.status_code == 202 and r.json()["run_id"] == rid
+        st = wait_done(c, rid)
+        assert st["state"] == "cancelled" and st["result"] is None
+        assert st["partial"]["coverage"]["low_coverage"] and st["partial"]["state"] == "cancelled"
+        assert st["credits"]["used"] < 60
+        ev = sse(c.get(f"/api/v1/runs/{rid}/events").text)
+        assert ev[-1][1] == "cancelled" and [e[0] for e in ev] == list(range(1, len(ev) + 1))
+        assert_envelope(c.post(f"/api/v1/runs/{rid}/cancel"), 409, "E_RUN_TERMINAL")
+        assert_envelope(c.post("/api/v1/runs/r_ffffffffff/cancel"), 404, "E_NOT_FOUND")
+        assert c.get(f"/api/v1/runs/{rid}/rings/9/evidence").status_code == 404  # partial is readable

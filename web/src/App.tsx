@@ -200,7 +200,13 @@ function RunView({ runId, go }: { runId: string; go: (p: string, b?: string) => 
     }
   }, [s.terminal, s.error, go]);
 
-  const result = s.terminal === 'done' ? status?.result ?? null : null;
+  // A cancelled run, or one stopped by an exhausted quota, still shows what was found (UF §6).
+  const result = s.terminal === 'done' ? status?.result ?? null : s.terminal ? status?.partial ?? null : null;
+  const partialNote = !result || s.terminal === 'done' ? null
+    : s.terminal === 'cancelled'
+      ? `Stopped early after ${status?.credits.used ?? 0} of ${status?.credits.budget ?? 0} credits. Results are based on partial coverage.`
+      : s.error ? problemCopy(s.error) : null;
+  const [cancelling, setCancelling] = useState(false);
   const started = status?.started_at ?? s.firstTs ?? now;
   const ended = status?.ended_at ?? (s.terminal ? now : null);
   const elapsed = Math.max(0, Math.round((ended ?? now) - started));
@@ -238,10 +244,16 @@ function RunView({ runId, go }: { runId: string; go: (p: string, b?: string) => 
         <a href="/" className="brand" onClick={(e) => { e.preventDefault(); go('/'); }}>Nakshatra</a>
         <span className="seed-name">{s.seedTitle || seedTitle || ' '}</span>
         <span className={`phase-pill ${s.terminal ?? ''}`} aria-live="polite">
-          {s.terminal === 'done' ? 'Done' : s.terminal === 'error' ? 'Stopped' : PHASES.find((p) => p.key.includes(s.phase))?.label}
+          {s.terminal === 'done' ? 'Done' : s.terminal === 'cancelled' ? 'Stopped early' : s.terminal === 'error' ? 'Stopped' : PHASES.find((p) => p.key.includes(s.phase))?.label}
         </span>
         <CreditBar used={s.used} cached={s.cached} budget={budget} offline={!!status && status.credits.used === 0 && s.cached > 0}
                    onOpen={() => setLedgerOpen(true)} />
+        {!s.terminal && (
+          <button className="cancel" disabled={cancelling}
+                  onClick={() => { setCancelling(true); api.cancel(runId).catch(() => setCancelling(false)); }}>
+            {cancelling ? 'Stopping…' : 'Cancel'}
+          </button>
+        )}
         <span className="elapsed" title="Elapsed time">{Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, '0')}</span>
       </header>
 
@@ -254,6 +266,7 @@ function RunView({ runId, go }: { runId: string; go: (p: string, b?: string) => 
           {!result && !s.error && (
             <LivePanel s={s} />
           )}
+          {partialNote && <p className="banner partial" role="status">{partialNote}</p>}
           {s.error && !result && (
             <div className="notice" role="alert">
               <p>{problemCopy(s.error)}</p>

@@ -87,3 +87,22 @@ async def test_too_few_reviews(tmp_path):
     w = World(seed_d_p=12, ring_size=0)
     st = await go(Store(tmp_path / "f.db"), w)
     assert st["state"] == "failed" and st["error"]["code"] == "E_TOO_FEW_REVIEWS" and st["credits"]["used"] == 1
+
+
+async def test_quota_mid_run_keeps_partial_result(tmp_path):
+    """UF §6: "Your SerpApi credits ran out. Showing what was found so far." (failed + partial)."""
+    w = World()
+    n = {"calls": 0}
+
+    def handler(request):
+        n["calls"] += 1
+        if n["calls"] > 20:
+            return httpx.Response(429, json={"error": "Your account has run out of searches."})
+        return w.handler(request)
+
+    store = Store(tmp_path / "q.db")
+    st = await run_once(w.seed_data_id, 60, api_key=KEY, now=NOW, cfg=cfg(), store=store,
+                        http=httpx.AsyncClient(transport=httpx.MockTransport(handler)))
+    assert st["state"] == "failed" and st["error"]["code"] == "E_QUOTA" and st["result"] is None
+    assert st["partial"] and st["partial"]["coverage"]["low_coverage"] and st["partial"]["state"] == "failed"
+    assert all(not v for v in violations(store).values())

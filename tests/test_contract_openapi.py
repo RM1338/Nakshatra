@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 from nakshatra.api.main import create_app
 
 # Should/Could endpoints still to build (MVP S3, S5, C1). Remove an entry when the endpoint lands.
-PENDING = {("post", "/runs/{run_id}/cancel"), ("get", "/runs/{run_id}/dossier"), ("get", "/places/search")}
+PENDING = {("get", "/runs/{run_id}/dossier"), ("get", "/places/search")}
 
 
 def test_generated_spec_covers_contract(tmp_path):

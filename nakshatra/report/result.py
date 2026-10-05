@@ -34,14 +34,14 @@ def verdict(reported: list[dict], rating: dict, n_expanded: int, n_places: int) 
 
 
 def build(*, run_id: str, seed: dict, credits: dict, coverage: dict, rings: list[dict], rating: dict,
-          config_hash: str, delta_days: float) -> dict[str, Any]:
+          config_hash: str, delta_days: float, state: str = "done") -> dict[str, Any]:
     for r in rings:
         r["explanation"] = ring_explanation(len(r["members"]), len(r["places"]), r["expected_overlap"],
                                             r["observed_overlap"], r["lockstep_ratio"], delta_days)
     reported = [r for r in rings if r["reported"]]
     v = verdict(reported, rating, coverage["reviewers_expanded"], coverage["places"])
     return {
-        "run_id": run_id, "state": "done", "seed": seed, "credits": credits, "coverage": coverage,
+        "run_id": run_id, "state": state, "seed": seed, "credits": credits, "coverage": coverage,
         "rings": rings, "rating": rating, "verdict": v,
         "explanations": [r["explanation"] for r in reported],
         "no_coordination_message": None if reported else v,

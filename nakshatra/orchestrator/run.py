@@ -141,13 +141,20 @@ class Run:
             await self._resolve()
             await self._sample()
             await self._expand()
-            await self._mine_and_report()
+            final = "cancelled" if self.cancel_requested else "done"
+            await self._mine_and_report(final)
             with self.store.tx():
-                self.store.run_update(self.id, state="done", ended_at=time.time())
-                self.state = "done"
-                self.bus.emit("phase", {"phase": "done", "ts": time.time()})
-                self.bus.emit("done", {"run_id": self.id})
+                self.store.run_update(self.id, state=final, ended_at=time.time())
+                self.state = final
+                self.bus.emit("phase", {"phase": final, "ts": time.time()})
+                self.bus.emit(final, {"run_id": self.id})
         except NakshatraError as e:
+            if e.code == "E_QUOTA" and self.seed is not None and self.state not in ("mining", "reporting"):
+                try:  # UF §6: "Showing what was found so far": mining needs no further calls
+                    self.low_coverage = True
+                    await self._mine_and_report("failed")
+                except Exception:  # noqa: BLE001 - the partial result is best effort; the error still stands
+                    log.exception("partial result for %s failed", self.id)
             self._fail(e.code, e.message)
         except Exception as e:  # noqa: BLE001 - surfaced as E_INTERNAL, logged with run_id
             log.exception("run %s crashed", self.id)
@@ -314,7 +321,9 @@ class Run:
         self._phase("expanding")
         return True
 
-    async def _mine_and_report(self) -> None:
+    async def _mine_and_report(self, final: str = "done") -> None:
+        """Mine and persist the result; for cancelled/failed runs the same row is the partial result (D6)."""
+        self.low_coverage = self.low_coverage or final != "done"
         self._phase("mining")
         c, g = self.cfg, self.g
         base_dps = [I._int(b.get("reviews")) or 0 for b in self.baseline if b["data_id"] not in g.pix]
@@ -358,7 +367,7 @@ class Run:
                       "places": len(g.places), "edges": len(g.edges), "low_coverage": self.low_coverage,
                       "non_google_skipped": self.skipped_non_google},
             rings=out_rings, rating={"displayed": S.rating, **rat}, config_hash=self.cfg.hash(),
-            delta_days=c.time.delta_days)
+            delta_days=c.time.delta_days, state=final)
         with self.store.tx():
             for (r, st, p_perm, ok, lock), o in zip(scored, out_rings, strict=True):
                 self.store.ring_put(self.id, o["idx"], [cids[u] for u in r.users],
@@ -398,6 +407,7 @@ def status_of(store: Store, row) -> dict[str, Any]:
     """RunStatus (API §3.2) from the persisted run row."""
     totals = store.ledger_totals(row["run_id"])
     err = None
+    res = store.result_get(row["run_id"])
     if row["error_code"]:
         last = store.conn.execute("SELECT payload_json FROM events WHERE run_id=? AND type='error' ORDER BY seq DESC"
                                   " LIMIT 1", (row["run_id"],)).fetchone()
@@ -405,7 +415,7 @@ def status_of(store: Store, row) -> dict[str, Any]:
     return {"run_id": row["run_id"], "state": row["state"], "started_at": row["started_at"],
             "ended_at": row["ended_at"], "credits": {"budget": row["budget"], "used": row["used"],
                                                      "cached": totals["cached"]},
-            "error": err, "result": store.result_get(row["run_id"]), "partial": None}
+            "error": err, **({"result": res, "partial": None} if row["state"] == "done" else {"result": None, "partial": res})}
 
 
 async def run_once(place: str, budget: int, *, db: str | Path | None = None, offline: bool = False,

@@ -351,7 +351,7 @@ ON CONFLICT(contributor_id, data_id) DO UPDATE SET
 | D5 | Every non-`inj:` edge's `source_hash` exists in `serp_cache` | Integrity query |
 | D6 | `events.seq` is gapless per run | Integrity query |
 | D7 | A cached ledger row is never billed | CHECK |
-| D8 | Terminal runs have exactly one `results` row (`done`) or none (`failed`, `cancelled`) | Integrity query |
+| D8 | A `done` run has exactly one `results` row; `cancelled`/`failed` runs may hold a partial result there; active runs have none (revised, DECISIONS D6) | Integrity query |
 
 ### 5.3 Integrity check (run in CI and before recording the demo)
 
@@ -368,9 +368,11 @@ WHERE s.params_hash IS NULL AND e.data_id NOT GLOB 'inj:*';
 -- D6: gapless event sequence
 SELECT run_id FROM events GROUP BY run_id HAVING MAX(seq) <> COUNT(*);
 
--- D8: results present exactly for done runs
+-- D8: every done run has its result; no result for an active run (revised, DECISIONS D6)
 SELECT r.run_id FROM runs r LEFT JOIN results x USING (run_id)
-WHERE (r.state = 'done') <> (x.run_id IS NOT NULL);
+WHERE r.state = 'done' AND x.run_id IS NULL;
+SELECT r.run_id FROM runs r JOIN results x USING (run_id)
+WHERE r.state NOT IN ('done', 'cancelled', 'failed');
 ```
 
 All four queries must return zero rows. Ship them as `python -m nakshatra.store.check`.

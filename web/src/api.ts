@@ -22,6 +22,7 @@ export const api = {
   health: () => call<Health>('/health'),
   runs: () => call<RunSummary[]>('/runs?limit=50'),
   run: (id: string) => call<RunStatus>(`/runs/${id}`),
+  cancel: (id: string) => call<RunStatus>(`/runs/${id}/cancel`, { method: 'POST' }),
   ledger: (id: string) => call<LedgerPage>(`/runs/${id}/ledger?limit=500`),
   create: (place: string, budget: number, offline: boolean) =>
     call<{ run_id: string }>('/runs', {

@@ -14,7 +14,7 @@ COMPACT_KM = 2.0        # places this close together may be one neighbourhood's 
 VARIED_RATINGS = 0.5    # crews post near-uniform stars; genuine groups vary
 BRAND_SHARE = 0.5       # share of ring places whose names contain the same distinctive word
 STOPWORDS = frozenset("""the and for with best near shop store centre center hospital clinic restaurant cafe hotel
-road street main branch outlet showroom coimbatore bengaluru bangalore india private limited services service""".split())
+road street main place branch outlet showroom coimbatore bengaluru bangalore india private limited services service""".split())
 
 
 def haversine_km(a: tuple[float, float], b: tuple[float, float]) -> float:

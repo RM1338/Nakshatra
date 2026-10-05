@@ -16,9 +16,12 @@ CHECKS = {
         WHERE s.params_hash IS NULL AND e.data_id NOT GLOB 'inj:*'""",
     "D6 gapless event sequence": """
         SELECT run_id FROM events GROUP BY run_id HAVING MAX(seq) <> COUNT(*)""",
-    "D8 results present exactly for done runs": """
+    "D8 every done run has its result": """
         SELECT r.run_id FROM runs r LEFT JOIN results x USING (run_id)
-        WHERE (r.state = 'done') <> (x.run_id IS NOT NULL) AND r.run_id <> 'r_0000000000'""",  # sentinel, API §5.4
+        WHERE r.state = 'done' AND x.run_id IS NULL AND r.run_id <> 'r_0000000000'""",  # sentinel, API §5.4
+    "D8b results only for finished runs": """
+        SELECT r.run_id FROM runs r JOIN results x USING (run_id)
+        WHERE r.state NOT IN ('done', 'cancelled', 'failed')""",
 }
 
 

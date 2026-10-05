@@ -164,6 +164,16 @@ def create_app(store: Store | None = None, cfg: Config | None = None, env: Env |
         st = S(request)
         return status_of(st.store, row_or_404(st, run_id))
 
+    @r.post("/runs/{run_id}/cancel", status_code=202)
+    async def cancel(run_id: str, request: Request) -> JSONResponse:
+        st = S(request)
+        row = row_or_404(st, run_id)
+        run = st.runs.get(run_id)
+        if row["state"] not in ACTIVE or run is None:
+            raise NakshatraError("E_RUN_TERMINAL", "this investigation has already finished")
+        run.cancel_requested = True  # honoured at the next SerpApi call boundary (API §3.3)
+        return JSONResponse(status_of(st.store, st.store.run_get(run_id)), status_code=202)
+
     @r.get("/runs/{run_id}/events")
     async def events(run_id: str, request: Request, after: int | None = Query(None, ge=0),
                      last_event_id: int | None = Header(None)) -> StreamingResponse:
@@ -206,9 +216,10 @@ def create_app(store: Store | None = None, cfg: Config | None = None, env: Env |
     async def evidence(run_id: str, idx: int, request: Request) -> dict:
         st = S(request)
         row = row_or_404(st, run_id)
-        if row["state"] != "done":
+        res = st.store.result_get(run_id)  # done, or the partial result of a cancelled/failed run
+        if row["state"] in ACTIVE or res is None:
             raise NakshatraError("E_RUN_NOT_DONE", "the result is not ready")
-        rings = (st.store.result_get(run_id) or {}).get("rings", [])
+        rings = res.get("rings", [])
         ring = next((x for x in rings if x["idx"] == idx), None)
         if ring is None:
             raise NakshatraError("E_NOT_FOUND", f"run {run_id} has no ring {idx}")
