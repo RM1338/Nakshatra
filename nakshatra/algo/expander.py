@@ -8,10 +8,17 @@ from nakshatra.graph.model import Graph
 
 
 class Expander:
-    def __init__(self, g: Graph, s0: dict[int, float], hot_boost: float):
-        self.g, self.beta = g, hot_boost
+    """Priority queue over reviewers. Order: feasibility tier, then π = s0 · (1 + β|H_v|), then contributor_id.
+
+    Tier (DECISIONS A18): an account needs the seed plus >= min_places other reviews to be in a ring. k_u from the
+    reviews page counts text reviews only (rating-only entries come on top), so k_u >= min_places + 1 is tier 0,
+    2..min_places is tier 1 (feasible only through rating-only entries) and <= 1 is tier 2. Unknown k_u is tier 0.
+    """
+
+    def __init__(self, g: Graph, s0: dict[int, float], hot_boost: float, min_places: int = 3):
+        self.g, self.beta, self.min_places = g, hot_boost, min_places
         self.s0 = dict(s0)
-        self.heap: list[tuple[float, str, int]] = []  # (-priority, contributor_id, u): ties break by contributor_id
+        self.heap: list[tuple[int, float, str, int]] = []
         self.done: set[int] = set()
         self.refined: set[int] = set()
         for u, s in s0.items():
@@ -21,11 +28,15 @@ class Expander:
         if u in self.done:
             return
         self.s0.setdefault(u, s0)
-        heapq.heappush(self.heap, (-(s0 * (1 + self.beta * n_hot)), self.g.users[u].contributor_id, u))
+        heapq.heappush(self.heap, (self.tier(u), -(s0 * (1 + self.beta * n_hot)), self.g.users[u].contributor_id, u))
+
+    def tier(self, u: int) -> int:
+        k = self.g.users[u].k_u
+        return 0 if k is None or k >= self.min_places + 1 else 1 if k >= 2 else 2
 
     def pop(self) -> int | None:
         while self.heap:
-            _, _, u = heapq.heappop(self.heap)
+            *_, u = heapq.heappop(self.heap)
             if u not in self.done:
                 self.done.add(u)
                 return u

@@ -146,6 +146,13 @@ load config → open the store (schema v2) → resolve seed → baseline → sam
 
 All four are automated in `tests/test_e2e_slice.py`. **Status: done (Oct 5).** Steps 1–12 are complete, plus lockstep and refinement from step 13.
 
-## 7. Blocked on the user
+## 7. Real-data log
 
-- **T01:** a SerpApi key with ≥ 1,200 credits in `.env` (`SERPAPI_API_KEY=`). Without it the code still works on fixtures, but real-place scouting, calibration (T31, T33) and `demo.db` (T34) cannot happen.
+| Date | What | Credits | Outcome |
+| --- | --- | --- | --- |
+| Oct 5 | T02 field-shape probes (sentinel run) | 6 | DECISIONS C1–C7 |
+| Oct 5 | **G1**: CLI live on a real 84-review Coimbatore fertility clinic (`0x3ba858e2ce004617:0xbf828b878d37ae96`) | 18 + 9 | Clean result. The first attempt exposed A18 (1-review accounts expanded first); the rerun followed 9 feasible reviewers across 65 places. Open question for T32: does the 0 → 0 plateau (A15) stop too early on places with ~30 feasible reviewers? |
+
+## 8. Blocked on the user
+
+- ~~T01: SerpApi key~~ added Oct 5. Credits used so far: 33.

@@ -232,7 +232,7 @@ class Run:
         self._phase("expanding")
         c, g = self.cfg, self.g
         s0 = prior.priors(g, self.seed, c.prior.weights)
-        ex = self.ex = Expander(g, s0, c.expand.hot_boost)
+        ex = self.ex = Expander(g, s0, c.expand.hot_boost, c.ring.min_places)
         plateau = Plateau(c.expand.plateau_eps, c.expand.plateau_window)
         n, stopped = 0, "queue"
         while not self.cancel_requested:

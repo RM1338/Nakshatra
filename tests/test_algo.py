@@ -44,6 +44,14 @@ def test_expander_never_twice_and_ties_by_contributor_id():
     assert order == ["10", "20", "30"]
 
 
+def test_feasibility_tiers_before_prior():
+    g = Graph()
+    one, three, many = g.user("1"), g.user("2"), g.user("3")
+    g.users[one].k_u, g.users[three].k_u, g.users[many].k_u = 1, 3, 9
+    ex = Expander(g, {one: 0.99, three: 0.9, many: 0.2}, 0.5, min_places=3)
+    assert [ex.pop(), ex.pop(), ex.pop()] == [many, three, one]
+
+
 def test_hot_boost_reorders():
     g = Graph()
     a, b = g.user("1"), g.user("2")
