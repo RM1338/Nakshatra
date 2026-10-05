@@ -444,6 +444,7 @@ function RingCard({ ring, n, color, selected, onSelect, openPlace }: {
           Expected by chance: {fmtN(ring.expected_overlap)}</span>
         <span title="Mean number of places each pair of these accounts actually shares.">Observed: {fmtN(ring.observed_overlap)}</span>
       </p>
+      {ring.notes?.map((n) => <p key={n} className="ring-note">{n}</p>)}
       <ul className="ring-places">
         {ring.places.map((p) => (
           <li key={p.data_id}>
@@ -465,6 +466,14 @@ function RingCard({ ring, n, color, selected, onSelect, openPlace }: {
           <dd>{ring.density.toFixed(2)}</dd>
           <dt title="Share of shared places where most of these accounts posted within 14 days of each other.">Posted together</dt>
           <dd>{ring.lockstep_ratio === null ? 'Timing not resolvable (dates too coarse)' : `${Math.round(ring.lockstep_ratio * 100)}% of places`}</dd>
+          {ring.guards && (
+            <>
+              <dt title="Variance of the star ratings these accounts gave the shared places. Crews tend to give uniform stars.">Rating variance</dt>
+              <dd>{ring.guards.rating_variance ?? '–'}</dd>
+              <dt title="Median distance between pairs of shared places.">Places spread</dt>
+              <dd>{ring.guards.spread_km === null ? '–' : `${ring.guards.spread_km.toFixed(1)} km`}</dd>
+            </>
+          )}
           <dt>Accounts</dt>
           <dd>{ring.members.join(', ')}</dd>
         </dl>

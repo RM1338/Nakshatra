@@ -16,6 +16,8 @@ export interface Ring {
   density: number; expected_overlap: number; observed_overlap: number;
   pval: number; pair_pval?: number; poisson_expected?: number; lockstep_ratio: number | null; reported: boolean; explanation: string;
   evidence?: EvidencePlace[];
+  guards?: { rating_variance: number | null; spread_km: number | null; brand_token: string | null };
+  notes?: string[];
 }
 export interface Result {
   seed: { data_id: string; title: string; rating: number | null; d_p: number | null };

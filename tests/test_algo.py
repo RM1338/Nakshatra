@@ -230,3 +230,24 @@ def test_rating_worked_example():
 def test_rating_empty():
     assert rating.adjusted_rating([], [], 4.0, 5, 1, 10, 7)["adjusted"] is None
     assert math.isclose(rating.membership_weights([peel.Ring([1], [], 0.5)], 1.0)[1], 0.5)
+
+
+# ---------- ring guards (S6) ----------
+def test_guards():
+    from nakshatra.algo.guards import guard_notes, haversine_km, ring_guards
+    assert haversine_km((11.0, 76.9), (11.0, 76.9)) == 0
+    assert 110 < haversine_km((11.0, 76.9), (12.0, 76.9)) < 112
+    g = Graph()
+    us = [g.user(str(i)) for i in range(4)]
+    ps = [g.place(f"0x{j + 1}:0x9") for j in range(3)]
+    for j, p in enumerate(ps):
+        g.places[p].lat, g.places[p].lng, g.places[p].title = 11.0 + j * 0.001, 76.9, f"Lakshmi Silks branch {j}"
+    for i, u in enumerate(us):
+        for p in ps:
+            g.add_edge(Edge(u, p, float(2 + (i % 4)), 0, 0, True))
+    gd = ring_guards(g, peel.Ring(us, ps, 1.0))
+    assert gd["spread_km"] < 0.5 and gd["rating_variance"] >= 0.5 and gd["brand_token"] in ("lakshmi", "silks")
+    notes = guard_notes(gd)
+    assert len(notes) == 2 and "real community" in notes[0] and "same brand" in notes[1]
+    crew = ring_guards(*(lambda g, s: (g, peel.Ring(*plant(g, s), 1.0)))(*random_graph(seed=2)))
+    assert crew["rating_variance"] == 0 and crew["brand_token"] is None and guard_notes(crew) == []

@@ -17,7 +17,7 @@ from typing import Any
 
 import httpx
 
-from nakshatra.algo import lockstep, peel, prior, rating
+from nakshatra.algo import guards, lockstep, peel, prior, rating
 from nakshatra.algo.expander import Expander, Plateau
 from nakshatra.algo.judge import judge
 from nakshatra.errors import NakshatraError
@@ -25,6 +25,7 @@ from nakshatra.graph import ingest as I
 from nakshatra.graph.model import Graph
 from nakshatra.orchestrator.events import EventBus
 from nakshatra.report import result as R
+from nakshatra.report.templates import check_copy
 from nakshatra.serp import engines as E
 from nakshatra.serp.budget import Budget
 from nakshatra.serp.client import Response, SerpClient
@@ -346,7 +347,8 @@ class Run:
                 "poisson_expected": R.sig3(st["expected_overlap"]),
                 "observed_overlap": R.sig3(st["observed_overlap"]), "pval": R.sig3(p_perm),
                 "pair_pval": R.sig3(st["pair_pval"]), "lockstep_ratio": None if lock is None else round(lock, 3),
-                "reported": ok, "evidence": self._evidence(r, names)})
+                "reported": ok, "evidence": self._evidence(r, names),
+                **self._guards(r)})
         expanded = sum(1 for U in g.users if U.expanded)
         result = R.build(
             run_id=self.id,
@@ -369,6 +371,10 @@ class Run:
                                 self.store.set_excerpt(cids[u], g.places[p].data_id, g.edges[(u, p)].snippet)
             self.store.result_put(self.id, json.dumps(result, sort_keys=True, separators=(",", ":")))
         self.result = result
+
+    def _guards(self, r: peel.Ring) -> dict:
+        gd = guards.ring_guards(self.g, r)
+        return {"guards": gd, "notes": [check_copy(n) for n in guards.guard_notes(gd)]}
 
     def _evidence(self, r: peel.Ring, names: dict[int, str]) -> list[dict]:
         """Who reviewed which ring place, and when, with pseudonyms only (API §5.1; stored in the result)."""
