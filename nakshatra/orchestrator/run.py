@@ -17,8 +17,9 @@ from typing import Any
 
 import httpx
 
-from nakshatra.algo import lockstep, peel, prior, rating, significance
+from nakshatra.algo import lockstep, peel, prior, rating
 from nakshatra.algo.expander import Expander, Plateau
+from nakshatra.algo.judge import judge
 from nakshatra.errors import NakshatraError
 from nakshatra.graph import ingest as I
 from nakshatra.graph.model import Graph
@@ -315,26 +316,10 @@ class Run:
     async def _mine_and_report(self) -> None:
         self._phase("mining")
         c, g = self.cfg, self.g
-        ring_cfg = c.ring.model_dump()
-        adj, cw = peel.build(g, self.seed)
-        rings = await asyncio.to_thread(peel.mine, adj, cw, **ring_cfg)
-        d_ps = [p.d_p if p.d_p is not None else 50 for p in g.places]
-        d_ps += [I._int(b.get("reviews")) or 0 for b in self.baseline if b["data_id"] not in g.pix]
-        H = significance.city_concentration(d_ps, c.stats.mass_scale)
-        k = {u: max(g.users[u].k_u or 0, len(g.uadj[u])) for u in adj}
-        pvals = await asyncio.to_thread(significance.permutation_gate, adj, cw, rings, ring_cfg, c.stats.n_perm,
-                                        c.stats.perm_seed)
-        floor = 1 / (c.stats.n_perm + 1)
-        if pvals and min(pvals) <= floor and c.stats.n_perm_max > c.stats.n_perm:
-            pvals = await asyncio.to_thread(significance.permutation_gate, adj, cw, rings, ring_cfg,
-                                            c.stats.n_perm_max, c.stats.perm_seed)
-        scored = []
-        for r, p_perm in zip(rings, pvals, strict=True):
-            st = significance.display_stat(r, adj, k, H)
-            ok = p_perm < c.stats.alpha and st["pair_pval"] < c.stats.alpha
-            lock = lockstep.lockstep_ratio(g, r, c.time.delta_days, c.time.lockstep_share,
-                                           c.time.max_median_width_days)
-            scored.append((r, st, p_perm, ok, lock))
+        base_dps = [I._int(b.get("reviews")) or 0 for b in self.baseline if b["data_id"] not in g.pix]
+        judged = await asyncio.to_thread(judge, g, self.seed, base_dps, c)
+        scored = [(j.ring, j.display, j.p_perm, j.reported, j.lockstep) for j in judged]
+        rings = [j.ring for j in judged]
         reported = [r for r, _, _, ok, _ in scored if ok]
 
         tot = sum(I._int(b.get("reviews")) or 0 for b in self.baseline)
@@ -359,7 +344,7 @@ class Run:
                 "density": round(r.density, 4), "expected_overlap": R.sig3(st["expected_overlap"]),
                 "observed_overlap": R.sig3(st["observed_overlap"]), "pval": R.sig3(p_perm),
                 "pair_pval": R.sig3(st["pair_pval"]), "lockstep_ratio": None if lock is None else round(lock, 3),
-                "reported": ok})
+                "reported": ok, "evidence": self._evidence(r, names)})
         expanded = sum(1 for U in g.users if U.expanded)
         result = R.build(
             run_id=self.id,
@@ -382,6 +367,19 @@ class Run:
                                 self.store.set_excerpt(cids[u], g.places[p].data_id, g.edges[(u, p)].snippet)
             self.store.result_put(self.id, json.dumps(result, sort_keys=True, separators=(",", ":")))
         self.result = result
+
+    def _evidence(self, r: peel.Ring, names: dict[int, str]) -> list[dict]:
+        """Who reviewed which ring place, and when, with pseudonyms only (API §5.1; stored in the result)."""
+        g, c = self.g, self.cfg
+        locked = lockstep.place_lockstep(g, r, c.time.delta_days, c.time.lockstep_share)
+        out = []
+        for p in r.places:
+            reviews = [{"member": names[u], "rating": g.edges[(u, p)].rating, "t_lo": _t(g.edges[(u, p)].t_lo),
+                        "t_hi": _t(g.edges[(u, p)].t_hi), "exact": g.edges[(u, p)].exact}
+                       for u in sorted(r.users, key=lambda u: int(names[u][1:])) if (u, p) in g.edges]
+            out.append({"data_id": g.places[p].data_id, "title": g.places[p].title, "d_p": g.places[p].d_p,
+                        "lockstep": locked[p], "reviews": reviews})
+        return out
 
     def status(self) -> dict[str, Any]:
         row = self.store.run_get(self.id)

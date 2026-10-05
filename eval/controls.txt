@@ -1,0 +1,2 @@
+# Real control places (landmarks, chains: coordination implausible). One Maps data_id per line.
+# Their graphs come from cached live runs; add a line after crawling a control.

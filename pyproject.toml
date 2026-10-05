@@ -30,6 +30,7 @@ packages = ["nakshatra"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+filterwarnings = ["ignore::DeprecationWarning:fastapi.testclient", "ignore:Using `httpx`"]
 
 [tool.ruff]
 line-length = 120

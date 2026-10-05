@@ -89,6 +89,23 @@ def trim(S_u: set[int], S_p: set[int], adj_u: Adj, adj_p: Adj, min_coverage: flo
     return S_u, S_p
 
 
+def anchored(S_u: set[int], S_p: set[int], adj_u: Adj, adj_p: Adj, c: dict[int, float], min_users: int,
+             min_places: int, min_coverage: float) -> tuple[set[int], set[int]] | None:
+    """Fallback when a block fails trimming because bystanders dominate it (DECISIONS A20): for each block place
+    with >= min_users block reviewers, trim starting from those reviewers; keep the densest valid ring."""
+    best: tuple[float, list[int], set[int], set[int]] | None = None
+    for p in sorted(S_p):
+        start = adj_p[p] & S_u
+        if len(start) < min_users:
+            continue
+        R, Q = trim(start, S_p, adj_u, adj_p, min_coverage)
+        if len(R) >= min_users and len(Q) >= min_places:
+            key = (ring_density(R, Q, adj_u, c), sorted(R))
+            if best is None or key[0] > best[0] + 1e-12 or (abs(key[0] - best[0]) <= 1e-12 and key[1] < best[1]):
+                best = (*key, R, Q)
+    return (best[2], best[3]) if best else None
+
+
 def ring_density(users: set[int], places: set[int], adj_u: Adj, c: dict[int, float]) -> float:
     n = len(users) + len(places)
     return sum(c[p] for u in users for p in adj_u[u] & places) / n if n else 0.0
@@ -96,26 +113,34 @@ def ring_density(users: set[int], places: set[int], adj_u: Adj, c: dict[int, flo
 
 def mine(adj_u: Adj, c: dict[int, float], min_users: int, min_places: int, min_coverage: float,
          max_rings: int) -> list[Ring]:
-    """Up to max_rings disjoint rings, densest first. Users of each peeled block are removed before the next."""
+    """Up to max_rings disjoint rings, densest first.
+
+    Each round peels the densest block and trims it (ALG §5.4). A block that trims to a ring loses only the ring's
+    users (ALG: "remove R and peel again"). A block that fails trimming may still contain a crew merged with
+    bystanders, so its densest anchored candidate is salvaged before the whole block is dropped (DECISIONS A20).
+    """
     adj_u = {u: set(ps) for u, ps in adj_u.items()}
     adj_p = _transpose(adj_u)
     rings: list[Ring] = []
-    for _ in range(max_rings * 3):  # bounded: blocks that fail the size test also consume an iteration
-        if len(rings) >= max_rings or not adj_u:
+    for _ in range(max_rings * 3):  # bounded: also runs inside every permutation null
+        if not adj_u:
             break
         S_u, S_p, _ = peel_once(adj_u, adj_p, c)
         if not S_u:
             break
         R, Q = trim(S_u, S_p, adj_u, adj_p, min_coverage)
-        if len(R) >= min_users and len(Q) >= min_places:
+        ok = len(R) >= min_users and len(Q) >= min_places
+        if ok:
             rings.append(Ring(sorted(R), sorted(Q), ring_density(R, Q, adj_u, c)))
-        for u in (R if len(R) >= min_users and len(Q) >= min_places else S_u):
+        elif found := anchored(S_u, S_p, adj_u, adj_p, c, min_users, min_places, min_coverage):
+            rings.append(Ring(sorted(found[0]), sorted(found[1]), ring_density(*found, adj_u, c)))
+        for u in (R if ok else S_u):
             for p in adj_u.pop(u):
                 adj_p[p].discard(u)
                 if not adj_p[p]:
                     del adj_p[p]
     rings.sort(key=lambda r: (-r.density, r.users))
-    return rings
+    return rings[:max_rings]
 
 
 def find_rings(g: Graph, seed: int, min_users: int, min_places: int, min_coverage: float,

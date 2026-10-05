@@ -75,19 +75,19 @@ Never-cut items (MVP §3): **M5, M6, M11**.
 
 | ID | Requirement | Acceptance test | Module | Status |
 | --- | --- | --- | --- | --- |
-| M1 / FR1 / IN-1..4 | Place input by URL / data_id; budget 20–200 | URL fixtures → data_id; bad input 400 E_BAD_PLACE with 0 credits; d_p < 20 → E_TOO_FEW_REVIEWS after 1 credit | `api`, `orchestrator`, `cli` | CLI done; API pending |
+| M1 / FR1 / IN-1..4 | Place input by URL / data_id; budget 20–200 | URL fixtures → data_id; bad input 400 E_BAD_PLACE with 0 credits; d_p < 20 → E_TOO_FEW_REVIEWS after 1 credit | `api`, `orchestrator`, `cli` | done (`test_api`, `test_e2e_slice`) |
 | M2 / FR20–21 / OP-1..3 / CR-9 | Cache-first client, budget tokens, ledger | ledger billed ≤ budget at 20/60/200; repeat run costs 0; key never cached; 429 retry; 401 E_AUTH; non-Success not cached; offline miss E_CACHE_MISS | `serp`, `store` | done (`test_client`, `test_budget`, `test_e2e_slice`) |
 | M3 / FR4 / CR-2,3 | Seed sampling `newestFirst` + `ratingHigh`, baseline | No duplicate review_id; exact dates on seed edges | `orchestrator`, `graph` | done (`test_ingest`, `test_e2e_slice`) |
 | M4 / FR5,6,8 / CR-1,4,5,8 | Prior + priority expansion + plateau | I2 monotone in k_u; local guide lowers s0; I4 never expanded twice; plateau fixture stops early | `algo.prior`, `algo.expander` | done (`test_algo`) |
 | **M5** / FR10 / DT-2 | Weighted ring mining | I5: planted 8×6 ring returned first; sparse random → none; camouflaged ring still found | `algo.peel` | done (`test_algo`) |
 | **M6** / FR11 / DT-3,4 | Poisson display + permutation gate | m = 0 → p = 1; power-user pair unremarkable; degrees preserved; on null graphs share of p < α ≈ α | `algo.significance` | done; `s` uncalibrated (DECISIONS B8) |
 | M7 / FR14 / RP-1 | Adjusted rating, `newestFirst`, CI | I6 no-ring invariant; CI contains the point; same seed → same CI | `algo.rating` | done (`test_algo`) |
-| M8 / FR9 / IF-20,21 | SSE with replay | First node < 5 s; gapless seq; Last-Event-ID resume; no raw IDs | `api`, `orchestrator.events` | todo |
+| M8 / FR9 / IF-20,21 | SSE with replay | First node < 5 s; gapless seq; Last-Event-ID resume; no raw IDs | `api`, `orchestrator.events` | done (`test_api`); first-node latency to measure in the UI |
 | M9 / IF-1..6 / RP-2,3 | Result screen: rating card, verdict, ring cards, graph, place drawer | Flow A1–A9 in the browser | `web`, `report` | todo |
 | M10 / NF-6 | Offline replay from `demo.db` | Clean clone, no key: replay identical (B3), 0 network calls | `store.export_demo`, `orchestrator` | todo |
 | **M11** / FR22 / OP-4 / NF-7..10 | Evaluation harness | `make eval` reproduces committed plots (injection grid, controls, null calibration, credit efficiency) | `eval/` | todo |
 | M12 | README | Insight, prior art, integration map, method, results, limitations, demo | `README.md` | todo |
-| NF-11..14 | Security, privacy, copy | Key grep test; localhost bind; banned-word lint | cross-cutting | key + copy tests done; bind pending (API) |
+| NF-11..14 | Security, privacy, copy | Key grep test; localhost bind; banned-word lint | cross-cutting | done (key, copy, `make dev` binds 127.0.0.1) |
 | DM §5.3 | Integrity check | `python -m nakshatra.store.check` returns 0 rows | `store.check` | done (`test_store`, `test_e2e_slice`) |
 
 **Should** (after all Musts): S1 hot-place refinement (CR-7), S2 lockstep (DT-5), S3 dossier MD/PDF (RP-4), S4 ledger drawer, S5 cancel with partial result, S6 ring guards. Refinement and lockstep are cheap and sit in the core loop, so they are built right after the Must slice (PLAN T17 and T20 are scheduled Oct 7).

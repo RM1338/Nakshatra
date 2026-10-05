@@ -1,0 +1,312 @@
+openapi: 3.1.0
+info:
+  title: Nakshatra API
+  version: 1.0.0
+  description: Local API for coordinated-review ring detection over Google Maps data retrieved via SerpApi.
+servers:
+  - url: http://127.0.0.1:8000/api/v1
+paths:
+  /runs:
+    post:
+      operationId: createRun
+      parameters:
+        - {name: Idempotency-Key, in: header, required: false, schema: {type: string, maxLength: 64}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/RunCreate'}
+      responses:
+        '201': {description: Created, content: {application/json: {schema: {$ref: '#/components/schemas/RunCreated'}}}}
+        '200': {description: Idempotent repeat, content: {application/json: {schema: {$ref: '#/components/schemas/RunCreated'}}}}
+        '400': {$ref: '#/components/responses/Error'}
+        '409': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+        '503': {$ref: '#/components/responses/Error'}
+    get:
+      operationId: listRuns
+      parameters:
+        - {name: limit, in: query, schema: {type: integer, minimum: 1, maximum: 50, default: 20}}
+        - {name: before, in: query, schema: {type: number}}
+      responses:
+        '200':
+          description: Runs, newest first
+          content:
+            application/json:
+              schema: {type: array, items: {$ref: '#/components/schemas/RunSummary'}}
+  /runs/{run_id}:
+    parameters: [{$ref: '#/components/parameters/RunId'}]
+    get:
+      operationId: getRun
+      responses:
+        '200': {description: Status, content: {application/json: {schema: {$ref: '#/components/schemas/RunStatus'}}}}
+        '404': {$ref: '#/components/responses/Error'}
+  /runs/{run_id}/cancel:
+    parameters: [{$ref: '#/components/parameters/RunId'}]
+    post:
+      operationId: cancelRun
+      responses:
+        '202': {description: Accepted, content: {application/json: {schema: {$ref: '#/components/schemas/RunStatus'}}}}
+        '404': {$ref: '#/components/responses/Error'}
+        '409': {$ref: '#/components/responses/Error'}
+  /runs/{run_id}/events:
+    parameters:
+      - {$ref: '#/components/parameters/RunId'}
+      - {name: after, in: query, schema: {type: integer, minimum: 0}}
+      - {name: Last-Event-ID, in: header, schema: {type: integer, minimum: 0}}
+    get:
+      operationId: streamEvents
+      responses:
+        '200':
+          description: Server-Sent Events; see section 4 for event types and payloads
+          content: {text/event-stream: {schema: {type: string}}}
+        '404': {$ref: '#/components/responses/Error'}
+  /runs/{run_id}/rings/{idx}/evidence:
+    parameters:
+      - {$ref: '#/components/parameters/RunId'}
+      - {name: idx, in: path, required: true, schema: {type: integer, minimum: 0}}
+    get:
+      operationId: getRingEvidence
+      responses:
+        '200': {description: Evidence, content: {application/json: {schema: {$ref: '#/components/schemas/RingEvidence'}}}}
+        '404': {$ref: '#/components/responses/Error'}
+        '409': {$ref: '#/components/responses/Error'}
+  /runs/{run_id}/dossier:
+    parameters:
+      - {$ref: '#/components/parameters/RunId'}
+      - {name: format, in: query, schema: {type: string, enum: [md, pdf], default: md}}
+    get:
+      operationId: getDossier
+      responses:
+        '200':
+          description: Dossier file
+          content:
+            text/markdown: {schema: {type: string}}
+            application/pdf: {schema: {type: string, format: binary}}
+        '409': {$ref: '#/components/responses/Error'}
+        '415': {$ref: '#/components/responses/Error'}
+        '501': {$ref: '#/components/responses/Error'}
+  /runs/{run_id}/ledger:
+    parameters:
+      - {$ref: '#/components/parameters/RunId'}
+      - {name: limit, in: query, schema: {type: integer, minimum: 1, maximum: 500, default: 200}}
+      - {name: after, in: query, schema: {type: integer}}
+    get:
+      operationId: getLedger
+      responses:
+        '200': {description: Ledger page, content: {application/json: {schema: {$ref: '#/components/schemas/LedgerPage'}}}}
+        '404': {$ref: '#/components/responses/Error'}
+  /places/search:
+    get:
+      operationId: searchPlaces
+      parameters:
+        - {name: q, in: query, required: true, schema: {type: string, minLength: 2, maxLength: 200}}
+        - {name: ll, in: query, schema: {type: string, pattern: '^@-?\d+(\.\d+)?,-?\d+(\.\d+)?,\d+(\.\d+)?z$'}}
+        - {name: near, in: query, schema: {type: string, maxLength: 200}}
+      responses:
+        '200':
+          description: Candidates
+          content: {application/json: {schema: {type: array, items: {$ref: '#/components/schemas/PlaceCandidate'}}}}
+        '422': {$ref: '#/components/responses/Error'}
+  /health:
+    get:
+      operationId: health
+      responses:
+        '200': {description: Health, content: {application/json: {schema: {$ref: '#/components/schemas/Health'}}}}
+components:
+  parameters:
+    RunId: {name: run_id, in: path, required: true, schema: {type: string, pattern: '^r_[0-9a-f]{10}$'}}
+  responses:
+    Error:
+      description: Error envelope
+      content: {application/json: {schema: {$ref: '#/components/schemas/ErrorEnvelope'}}}
+  schemas:
+    State:
+      type: string
+      enum: [created, resolving, sampling, expanding, refining, mining, reporting, done, failed, cancelled]
+    RunCreate:
+      type: object
+      required: [place]
+      additionalProperties: false
+      properties:
+        place: {type: string, minLength: 3, maxLength: 2048}
+        budget: {type: integer, minimum: 20, maximum: 200, default: 60}
+        offline: {type: boolean, default: false}
+    RunCreated:
+      type: object
+      required: [run_id, state, budget, offline, links]
+      properties:
+        run_id: {type: string}
+        state: {$ref: '#/components/schemas/State'}
+        seed_data_id: {type: [string, 'null']}
+        budget: {type: integer}
+        offline: {type: boolean}
+        links:
+          type: object
+          properties: {self: {type: string}, events: {type: string}, ledger: {type: string}}
+    RunSummary:
+      type: object
+      required: [run_id, state, started_at, credits_used]
+      properties:
+        run_id: {type: string}
+        state: {$ref: '#/components/schemas/State'}
+        seed_title: {type: [string, 'null']}
+        started_at: {type: number}
+        credits_used: {type: integer}
+        rings_reported: {type: integer}
+    Credits:
+      type: object
+      required: [budget, used, cached]
+      properties: {budget: {type: integer}, used: {type: integer}, cached: {type: integer}}
+    RunStatus:
+      type: object
+      required: [run_id, state, started_at, credits]
+      properties:
+        run_id: {type: string}
+        state: {$ref: '#/components/schemas/State'}
+        started_at: {type: number}
+        ended_at: {type: [number, 'null']}
+        credits: {$ref: '#/components/schemas/Credits'}
+        error: {oneOf: [{$ref: '#/components/schemas/ErrorBody'}, {type: 'null'}]}
+        result: {oneOf: [{$ref: '#/components/schemas/Result'}, {type: 'null'}]}
+        partial: {oneOf: [{$ref: '#/components/schemas/Result'}, {type: 'null'}]}
+    Result:
+      type: object
+      required: [seed, coverage, rings, rating, config_hash]
+      properties:
+        seed:
+          type: object
+          properties:
+            data_id: {type: string}
+            title: {type: string}
+            rating: {type: [number, 'null']}
+            d_p: {type: [integer, 'null']}
+        coverage:
+          type: object
+          properties:
+            reviewers_sampled: {type: integer}
+            reviewers_expanded: {type: integer}
+            places: {type: integer}
+            edges: {type: integer}
+            low_coverage: {type: boolean}
+        rings: {type: array, items: {$ref: '#/components/schemas/Ring'}}
+        rating: {$ref: '#/components/schemas/Rating'}
+        no_coordination_message: {type: [string, 'null']}
+        narrative: {type: [string, 'null']}
+        config_hash: {type: string}
+    Ring:
+      type: object
+      required: [idx, members, stream_members, places, density, expected_overlap, observed_overlap, pval, reported, explanation]
+      properties:
+        idx: {type: integer}
+        members: {type: array, items: {type: string, pattern: '^R[0-9]+$'}}
+        stream_members: {type: array, items: {type: string, pattern: '^S[0-9]+$'}}
+        places:
+          type: array
+          items:
+            type: object
+            required: [data_id, title]
+            properties: {data_id: {type: string}, title: {type: string}, d_p: {type: [integer, 'null']}}
+        density: {type: number}
+        expected_overlap: {type: number}
+        observed_overlap: {type: number}
+        pval: {type: number, minimum: 0, maximum: 1}
+        lockstep_ratio: {type: [number, 'null'], minimum: 0, maximum: 1}
+        reported: {type: boolean}
+        explanation: {type: string}
+    Rating:
+      type: object
+      required: [displayed, adjusted, ci, n_sampled]
+      properties:
+        displayed: {type: [number, 'null']}
+        adjusted: {type: [number, 'null']}
+        ci: {type: array, minItems: 2, maxItems: 2, items: {type: [number, 'null']}}
+        sample_mean: {type: [number, 'null']}
+        n_sampled: {type: integer}
+    RingEvidence:
+      type: object
+      required: [run_id, idx, places]
+      properties:
+        run_id: {type: string}
+        idx: {type: integer}
+        places:
+          type: array
+          items:
+            type: object
+            properties:
+              data_id: {type: string}
+              title: {type: string}
+              d_p: {type: [integer, 'null']}
+              lockstep: {type: boolean}
+              reviews:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    member: {type: string}
+                    rating: {type: number}
+                    t_lo: {type: [number, 'null']}
+                    t_hi: {type: [number, 'null']}
+                    exact: {type: boolean}
+    LedgerPage:
+      type: object
+      required: [run_id, totals, items]
+      properties:
+        run_id: {type: string}
+        totals:
+          type: object
+          properties:
+            billed: {type: integer}
+            cached: {type: integer}
+            failed: {type: integer}
+            by_pool: {type: object, additionalProperties: {type: integer}}
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id: {type: integer}
+              engine: {type: string}
+              pool: {type: [string, 'null']}
+              cached: {type: boolean}
+              billed: {type: boolean}
+              ok: {type: boolean}
+              latency_ms: {type: integer}
+              ts: {type: number}
+              search_id: {type: [string, 'null']}
+        next: {type: [integer, 'null']}
+    PlaceCandidate:
+      type: object
+      required: [data_id, title, eligible]
+      properties:
+        data_id: {type: string}
+        title: {type: string}
+        type: {type: [string, 'null']}
+        rating: {type: [number, 'null']}
+        d_p: {type: [integer, 'null']}
+        address: {type: [string, 'null']}
+        eligible: {type: boolean}
+    Health:
+      type: object
+      required: [status, version, schema_version, db, api_key_present, offline_forced]
+      properties:
+        status: {type: string, enum: [ok, degraded]}
+        version: {type: string}
+        schema_version: {type: integer}
+        db: {type: string, enum: [ok, error]}
+        api_key_present: {type: boolean}
+        offline_forced: {type: boolean}
+        active_run: {type: [string, 'null']}
+    ErrorBody:
+      type: object
+      required: [code, message]
+      properties:
+        code: {type: string}
+        message: {type: string}
+        details: {type: object}
+        run_id: {type: [string, 'null']}
+    ErrorEnvelope:
+      type: object
+      required: [error]
+      properties:
+        error: {$ref: '#/components/schemas/ErrorBody'}

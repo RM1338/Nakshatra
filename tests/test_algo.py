@@ -77,9 +77,18 @@ def test_planted_ring_recovered_first():
     assert rings and set(rings[0].users) == set(users) and set(rings[0].places) == set(places)
 
 
-def test_sparse_random_graph_gives_no_ring():
+def test_sparse_random_graph_gives_no_strong_ring():
+    """Chance overlaps may surface as weak candidates (anchored salvage, DECISIONS A20); none is crew-like and the
+    permutation gate reports none."""
+    from nakshatra.algo.judge import judge
+    from nakshatra.settings import load_config
+    for sd in (0, 3):
+        g, s = random_graph(seed=sd)
+        assert all(r.density < 0.5 for r in peel.find_rings(g, s, **RING))
+        assert not any(j.reported for j in judge(g, s, [], load_config()))
     g, s = random_graph(seed=3)
-    assert peel.find_rings(g, s, **RING) == []
+    plant(g, s)
+    assert peel.find_rings(g, s, **RING)[0].density > 1.0
 
 
 def test_camouflaged_ring_still_recovered():
@@ -95,6 +104,19 @@ def test_seed_excluded_and_deterministic():
     a = peel.find_rings(g, s, **RING)
     b = peel.find_rings(g, s, **RING)
     assert a == b and all(s not in r.places for r in a)
+
+
+def test_ring_inside_heavy_block_is_not_discarded():
+    """Regression (DECISIONS A20): the densest block was the crew + 32 heavy genuine users; whole-block trimming
+    failed and the crew was discarded. Frozen from synthetic city 300 at budget 120."""
+    import json
+    from pathlib import Path
+    fx = json.loads((Path(__file__).parent / "fixtures/merged_block.json").read_text())
+    adj = {int(u): set(ps) for u, ps in fx["adj"].items()}
+    c = {int(p): v for p, v in fx["c"].items()}
+    crew = set(fx["crew"])
+    rings = peel.mine(adj, c, **RING)
+    assert any(len(set(r.users) & crew) >= 8 and len(set(r.users) - crew) <= 2 for r in rings)
 
 
 def test_two_rings():

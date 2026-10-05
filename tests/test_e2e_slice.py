@@ -14,8 +14,7 @@ KEY = "synthetic-test-key-0123456789"
 
 
 def cfg():
-    base = load_config()  # mass_scale pinned for the synthetic city (DECISIONS B8)
-    return base.model_copy(update={"stats": base.stats.model_copy(update={"mass_scale": 4.0})})
+    return load_config()
 
 
 def stable(status):
