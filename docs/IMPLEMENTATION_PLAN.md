@@ -157,7 +157,7 @@ All four are automated in `tests/test_e2e_slice.py`. **Status: done (Oct 5).** S
 | Oct 5 | Clinic #2: Vamsam Hospital & Fertility Centre (`0x3ba85983d088966d:0xeb6a844b48844f9b`) | 22 | Clean: 9 reviewers, 47 places |
 | Oct 5 | Controls: Gass Forest Museum, Valankulam Boat House (budget 25 each) | 14 + 14 | Clean, 0 candidates. Used for τ (A21) |
 
-Balance after scouting: **166 of 250** (SerpApi's own count matches the ledger).
+Balance after scouting: **166 of 250**. On Oct 6 SerpApi reported **18 left** (232 used); Nakshatra's ledger accounts for 98, so 134 were used outside the app with the same key (SerpApi's own count matches the ledger).
 
 ## 8. Blocked on the user
 
